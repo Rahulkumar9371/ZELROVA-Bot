@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZELROVA Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="zelrova-dashboard">
+
+  <div class="dashboard-bg">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="ZELROVA Logo">
+      <div>
+        <h2>ZELROVA</h2>
+        <p>Control Center</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a class="active" href="/dashboard">⚡ Overview</a>
+      <a href="/moderation">🛡 Moderation</a>
+      <a href="/security">🔐 Security</a>
+      <a href="/automod">🤖 AutoMod</a>
+      <a href="/welcome">👋 Welcome</a>
+      <a href="/reaction-roles">🎭 Reaction Roles</a>
+      <a href="/tickets">🎫 Tickets</a>
+      <a href="/levels">📊 Levels</a>
+      <a href="/logs">📜 Logs</a>
+      <a href="/announcements">📢 Announcements</a>
+      <a href="/analytics">📈 Analytics</a>
+      <a href="/backups">☁ Backup</a>
+      <a href="/ai">🧠 AI</a>
+      <a href="/owner-panel">👑 Owner Panel</a>
+      <a href="/whitelist">⭐ Whitelist</a>
+      <a href="/servers">🌐 Servers</a>
+    </nav>
+
+    <div class="premium-card">
+      <span>ULTIMATE MODE</span>
+      <h3>500+ Features</h3>
+      <p>All-in-one Discord ecosystem with premium modules.</p>
+      <button>Upgrade System</button>
+    </div>
+  </aside>
+
+  <main class="main-panel">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+
+      <div>
+        <h1>Dashboard Overview</h1>
+        <p>One Bot. Everything You Need.</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="ghost-btn">Invite Bot</button>
+        <button class="main-btn" id="saveAllBtn">Save Changes</button>
+      </div>
+    </header>
+
+    <section class="hero-panel glass-card">
+      <div>
+        <span class="tag">ZELROVA v1.0 Foundation</span>
+        <h2>Premium Discord Bot Control Center</h2>
+        <p>Manage moderation, security, AI, tickets, levels, logs, community tools and owner controls from one dashboard.</p>
+      </div>
+
+      <div class="server-status">
+        <span class="status-dot"></span>
+        <div>
+          <h3>Bot Online</h3>
+          <p>Render + Flask + JSON Active</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card glass-card">
+        <span>Total Servers</span>
+        <h2>{{ data.stats.servers }}</h2>
+        <p>Server detection active</p>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span>Active Users</span>
+        <h2>{{ data.stats.users }}</h2>
+        <p>Community network</p>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span>Commands Used</span>
+        <h2>{{ data.stats.commands }}</h2>
+        <p>Live command activity</p>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span>Security Score</span>
+        <h2>{{ data.stats.security_score }}%</h2>
+        <p>Protection enabled</p>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Quick Actions</h2>
+          <span>Fast controls</span>
+        </div>
+
+        <div class="quick-actions">
+          <button data-action="Enable AutoMod">Enable AutoMod</button>
+          <button data-action="Emergency Security Mode">Emergency Security</button>
+          <button data-action="Create Backup">Create Backup</button>
+          <button data-action="Global Broadcast">Global Broadcast</button>
+          <button data-action="Maintenance Mode">Maintenance Mode</button>
+          <button data-action="Developer Mode">Developer Mode</button>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Live Server Status</h2>
+          <span class="online-pill">Online</span>
+        </div>
+
+        <div class="status-list">
+          <div><span>Latency</span><b>{{ data.stats.latency }}</b></div>
+          <div><span>Database</span><b>{{ data.stats.database }}</b></div>
+          <div><span>Hosting</span><b>{{ data.stats.hosting }}</b></div>
+          <div><span>Dashboard</span><b>{{ data.stats.dashboard }}</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card">
+      <div class="section-title">
+        <h2>Feature Modules</h2>
+        <span>Everything editable</span>
+      </div>
+
+      <div class="module-grid">
+        {% for key, value in data.server_config.modules.items() %}
+        <div class="module-card">
+          <div>
+            <h3>{{ key.replace("_", " ").title() }}</h3>
+            <p>ZELROVA {{ key.replace("_", " ") }} control module.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-module="{{ key }}" {% if value %}checked{% endif %}>
+            <span></span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card ai-panel">
+        <div class="section-title">
+          <h2>AI System</h2>
+          <span>Version 7.0</span>
+        </div>
+
+        <p>AI Chat, AI Moderator, AI Translate, AI Summary, AI FAQ, Coding Helper, Anime Helper and Story Helper.</p>
+
+        <textarea id="aiPersonality">Friendly, smart, premium ZELROVA assistant for Discord communities.</textarea>
+        <button class="main-btn" data-action="Update AI System">Update AI</button>
+      </div>
+
+      <div class="glass-card owner-panel">
+        <div class="section-title">
+          <h2>Owner Panel</h2>
+          <span>Private</span>
+        </div>
+
+        <div class="owner-tools">
+          <button data-action="Bot Status Control">Bot Status</button>
+          <button data-action="Remote Commands">Remote Commands</button>
+          <button data-action="Premium Manager">Premium Manager</button>
+          <button data-action="Global Ban">Global Ban</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card">
+      <div class="section-title">
+        <h2>Roadmap Progress</h2>
+        <span>14 Phases</span>
+      </div>
+
+      <div class="roadmap">
+        <div class="phase done">Phase 1<br><b>Foundation</b></div>
+        <div class="phase active">Phase 2<br><b>Moderation</b></div>
+        <div class="phase">Phase 3<br><b>Security</b></div>
+        <div class="phase">Phase 4<br><b>Community</b></div>
+        <div class="phase">Phase 5<br><b>Tickets</b></div>
+        <div class="phase">Phase 6<br><b>Levels</b></div>
+        <div class="phase">Phase 7<br><b>AI</b></div>
+        <div class="phase">Phase 8<br><b>Entertainment</b></div>
+        <div class="phase">Phase 9<br><b>Dashboard PRO</b></div>
+        <div class="phase">Phase 10<br><b>Community</b></div>
+        <div class="phase">Phase 11<br><b>Premium</b></div>
+        <div class="phase">Phase 12<br><b>Ultimate</b></div>
+        <div class="phase">Phase 13<br><b>Owner Panel</b></div>
+        <div class="phase">Phase 14<br><b>Final Release</b></div>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>ZELROVA Community Server</h2>
+          <span>Official Hub</span>
+        </div>
+
+        <div class="tag-cloud">
+          <span>Anime</span><span>Gaming</span><span>Developer</span><span>Coding</span>
+          <span>English</span><span>Japanese</span><span>Music</span><span>Fun</span>
+          <span>Manga</span><span>Story Writer</span><span>Unique Ideas</span>
+          <span>Events</span><span>Support</span><span>Updates</span>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Server Themes</h2>
+          <span>Premium presets</span>
+        </div>
+
+        <div class="theme-grid">
+          <button class="theme-card red-theme">Dark Red</button>
+          <button class="theme-card purple-theme">Dark Purple</button>
+          <button class="theme-card blue-theme">Dark Blue</button>
+          <button class="theme-card anime-theme">Anime</button>
+          <button class="theme-card cyber-theme">Cyber</button>
+          <button class="theme-card custom-theme">Custom</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Analytics</h2>
+          <span>Live widgets</span>
+        </div>
+
+        <div class="analytics-bars">
+          <div><span>Moderation</span><i style="width: 82%;"></i></div>
+          <div><span>Security</span><i style="width: 94%;"></i></div>
+          <div><span>Community</span><i style="width: 71%;"></i></div>
+          <div><span>AI Usage</span><i style="width: 64%;"></i></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Recent Activity</h2>
+          <span>Logs viewer</span>
+        </div>
+
+        <ul class="activity-list" id="activityList">
+          <li>Foundation system loaded successfully.</li>
+          <li>Dashboard routes are working.</li>
+          <li>JSON database connected.</li>
+          <li>Render deployment active.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">
+      <p>© 2026 ZELROVA Bot — One Bot. Everything You Need.</p>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast">Saved successfully</div>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Logs</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- Sidebar -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+
+<h2>ZELROVA</h2>
+
+<p>Logs Center</p>
+
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+
+<a href="/moderation">🛡 Moderation</a>
+
+<a href="/security">🔐 Security</a>
+
+<a href="/automod">🤖 AutoMod</a>
+
+<a href="/welcome">👋 Welcome</a>
+
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+
+<a href="/tickets">🎫 Tickets</a>
+
+<a href="/levels">📊 Levels</a>
+
+<a class="active" href="/logs">📜 Logs</a>
+
+<a href="/analytics">📈 Analytics</a>
+
+<a href="/announcements">📢 Announcements</a>
+
+<a href="/ai">🧠 AI</a>
+
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>LOG CENTER</span>
+
+<h3>Everything Recorded</h3>
+
+<p>
+
+Monitor moderation,
+security,
+tickets,
+commands,
+joins,
+leaves and system events.
+
+</p>
+
+<button>
+
+Export Logs
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>Server Logs</h1>
+
+<p>
+
+Track every important action inside your server.
+
+</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Refresh
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Save
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+LOG SYSTEM
+
+</span>
+
+<h2>
+
+Advanced Audit Logs
+
+</h2>
+
+<p>
+
+View every moderation,
+ticket,
+security,
+AI,
+member,
+message,
+voice,
+role and owner action from one place.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+Logging Active
+
+</h3>
+
+<p>
+
+Recording events...
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Log Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Log Modules
+
+</h2>
+
+<span>
+
+Enabled
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>Moderation Logs</h3>
+
+<p>
+
+Warn,
+Kick,
+Ban,
+Mute,
+Timeout,
+Purge.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Security Logs</h3>
+
+<p>
+
+Raid,
+Bot,
+Webhook,
+Role protection.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Message Logs</h3>
+
+<p>
+
+Deleted and edited messages.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Member Logs</h3>
+
+<p>
+
+Join,
+Leave,
+Boost.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Voice Logs</h3>
+
+<p>
+
+Join,
+Leave,
+Move,
+Mute.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Role Logs</h3>
+
+<p>
+
+Role create,
+delete,
+edit.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Ticket Logs</h3>
+
+<p>
+
+Open,
+Claim,
+Close,
+Transcript.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>AI Logs</h3>
+
+<p>
+
+AI actions and responses.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Owner Logs</h3>
+
+<p>
+
+Developer commands.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Dashboard -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Log Statistics
+
+</h2>
+
+<span>
+
+Live
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Today's Logs
+
+</span>
+
+<b>
+
+5,248
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Warnings
+
+</span>
+
+<b>
+
+14
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Bans
+
+</span>
+
+<b>
+
+3
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Security Alerts
+
+</span>
+
+<b>
+
+7
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Storage
+
+</span>
+
+<b>
+
+JSON Active
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent Events
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+User warned for spam.
+
+</li>
+
+<li>
+
+Raid protection activated.
+
+</li>
+
+<li>
+
+Ticket transcript exported.
+
+</li>
+
+<li>
+
+Role deleted and restored.
+
+</li>
+
+<li>
+
+Owner executed maintenance mode.
+
+</li>
+
+<li>
+
+AI moderation removed message.
+
+</li>
+
+</ul>
+
+</div>
+
+</section>
+
+<!-- Search -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Search Logs
+
+</h2>
+
+<span>
+
+Coming Soon
+
+</span>
+
+</div>
+
+<textarea>
+
+Search by:
+
+User ID
+
+Channel
+
+Moderator
+
+Action
+
+Date
+
+Reason
+
+Message ID
+
+Role
+
+Ticket
+
+</textarea>
+
+<button class="main-btn">
+
+Search Logs
+
+</button>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • Log Center
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

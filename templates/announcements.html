@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Announcements</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Announcements</p>
+    </div>
+  </div>
+
+  <nav class="side-nav">
+    <a href="/dashboard">⚡ Dashboard</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/analytics">📈 Analytics</a>
+    <a class="active" href="/announcements">📢 Announcements</a>
+    <a href="/ai">🧠 AI</a>
+    <a href="/owner-panel">👑 Owner Panel</a>
+  </nav>
+
+  <div class="premium-card">
+    <span>AUTO ANNOUNCE</span>
+    <h3>Scheduled Posts</h3>
+    <p>Send updates, events, reminders, RSS and community news automatically.</p>
+    <button>Create Post</button>
+  </div>
+</aside>
+
+<main class="main-panel">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div>
+      <h1>Announcements</h1>
+      <p>Manage server updates, scheduled messages and event posts.</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost-btn">Preview</button>
+      <button class="main-btn" id="saveAllBtn">Save Announcement</button>
+    </div>
+  </header>
+
+  <section class="hero-panel glass-card">
+    <div>
+      <span class="tag">Automation System</span>
+      <h2>Smart Announcement Manager</h2>
+      <p>Auto announcement, scheduled messages, event reminders, auto publish, RSS feed, update posts and community notices.</p>
+    </div>
+    <div class="server-status">
+      <span class="status-dot"></span>
+      <div>
+        <h3>Scheduler Ready</h3>
+        <p>Auto posts enabled</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Announcement Modules</h2>
+      <span>Automation</span>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-card"><h3>Auto Announcement</h3><p>Post updates automatically.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Scheduled Messages</h3><p>Schedule future messages.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Event Reminder</h3><p>Remind members before events.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Auto Publish</h3><p>Publish announcement channel posts.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>RSS Feed</h3><p>Send news/blog updates.</p><label class="switch"><input type="checkbox"><span></span></label></div>
+      <div class="module-card"><h3>Update Posts</h3><p>Post bot/server updates.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+    </div>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Message Editor</h2>
+        <span>Post Builder</span>
+      </div>
+      <textarea>📢 ZELROVA Update
+
+New dashboard modules are now available.
+Check announcements, analytics, tickets and AI controls.</textarea>
+      <button class="main-btn">Schedule Message</button>
+    </div>
+
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Upcoming Posts</h2>
+        <span>Queue</span>
+      </div>
+      <ul class="activity-list">
+        <li>Community event reminder — Today 7 PM</li>
+        <li>Weekly server update — Sunday</li>
+        <li>Bot maintenance notice — Scheduled</li>
+        <li>Partner announcement — Draft</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast">Saved successfully</div>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

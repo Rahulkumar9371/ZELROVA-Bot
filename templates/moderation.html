@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZELROVA Moderation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="zelrova-dashboard">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="ZELROVA">
+      <div>
+        <h2>ZELROVA</h2>
+        <p>Moderation System</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a href="/dashboard">⚡ Overview</a>
+      <a class="active" href="/moderation">🛡 Moderation</a>
+      <a href="/security">🔐 Security</a>
+      <a href="/automod">🤖 AutoMod</a>
+      <a href="/welcome">👋 Welcome</a>
+      <a href="/tickets">🎫 Tickets</a>
+      <a href="/levels">📊 Levels</a>
+      <a href="/logs">📜 Logs</a>
+      <a href="/ai">🧠 AI</a>
+      <a href="/owner-panel">👑 Owner Panel</a>
+    </nav>
+
+    <div class="premium-card">
+      <span>MODERATION PRO</span>
+      <h3>Server Control</h3>
+      <p>Warn, kick, ban, timeout, purge, lock and AI moderation.</p>
+      <button>Upgrade</button>
+    </div>
+  </aside>
+
+  <main class="main-panel">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div>
+        <h1>Moderation</h1>
+        <p>Control punishments, filters and moderator actions.</p>
+      </div>
+      <div class="top-actions">
+        <button class="ghost-btn">Reset</button>
+        <button class="main-btn" id="saveAllBtn">Save Settings</button>
+      </div>
+    </header>
+
+    <section class="hero-panel glass-card">
+      <div>
+        <span class="tag">PHASE 2 — Version 2.0</span>
+        <h2>Advanced Moderation System</h2>
+        <p>Manage warn, kick, ban, mute, timeout, slowmode, purge, nickname, lock, unlock and full moderator logs.</p>
+      </div>
+      <div class="server-status">
+        <span class="status-dot"></span>
+        <div>
+          <h3>Active</h3>
+          <p>Dashboard Controls Enabled</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card">
+      <div class="section-title">
+        <h2>Moderation Commands</h2>
+        <span>Top controls</span>
+      </div>
+
+      <div class="module-grid">
+        <div class="module-card"><h3>Warn</h3><p>Give warning to users and save history.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Kick</h3><p>Remove users from server with reason logs.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Ban</h3><p>Ban harmful users and protect community.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Mute</h3><p>Mute users using role or timeout system.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Timeout</h3><p>Temporary user restrictions for rule breaks.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Purge</h3><p>Bulk delete messages with clean logs.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Slowmode</h3><p>Control message speed in busy channels.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Nickname</h3><p>Change or reset inappropriate nicknames.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Lock / Unlock</h3><p>Lock channels during raids or events.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Auto Punishment</h2>
+          <span>Smart rules</span>
+        </div>
+        <div class="status-list">
+          <div><span>3 Warnings</span><b>Timeout</b></div>
+          <div><span>5 Warnings</span><b>Kick</b></div>
+          <div><span>7 Warnings</span><b>Ban Review</b></div>
+          <div><span>Mass Ping</span><b>Instant Timeout</b></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Recent Moderation Logs</h2>
+          <span>Live</span>
+        </div>
+        <ul class="activity-list">
+          <li>AutoMod scanned recent messages.</li>
+          <li>Warning system loaded successfully.</li>
+          <li>Moderation logs connected with JSON.</li>
+          <li>Dashboard controls ready.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Saved successfully</div>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

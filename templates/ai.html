@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • AI Center</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+<img src="{{ url_for('static', filename='logo.png') }}">
+<div>
+<h2>ZELROVA</h2>
+<p>AI Center</p>
+</div>
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+<a href="/moderation">🛡 Moderation</a>
+<a href="/security">🔐 Security</a>
+<a href="/automod">🤖 AutoMod</a>
+<a href="/welcome">👋 Welcome</a>
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+<a href="/tickets">🎫 Tickets</a>
+<a href="/levels">📊 Levels</a>
+<a href="/logs">📜 Logs</a>
+<a href="/analytics">📈 Analytics</a>
+<a href="/announcements">📢 Announcements</a>
+<a href="/backups">☁ Backup</a>
+
+<a class="active" href="/ai">
+
+🧠 AI Center
+
+</a>
+
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>ZELROVA AI</span>
+
+<h3>Smart Assistant</h3>
+
+<p>
+
+Control every AI module from one dashboard.
+
+</p>
+
+<button>
+
+Enable AI
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ====================== -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>
+
+Artificial Intelligence
+
+</h1>
+
+<p>
+
+Manage every AI feature from one place.
+
+</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Restart AI
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Save AI
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 7
+
+</span>
+
+<h2>
+
+AI Command Center
+
+</h2>
+
+<p>
+
+AI Chat,
+AI Moderator,
+AI Translate,
+AI FAQ,
+AI Coding Helper,
+AI Anime Helper,
+AI Story Helper,
+AI Assistant,
+AI Summary,
+AI Welcome.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+AI Online
+
+</h3>
+
+<p>
+
+Neural System Running
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- AI Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+AI Modules
+
+</h2>
+
+<span>
+
+Version 7.0
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+<h3>AI Chat</h3>
+<p>Chat naturally with server members.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Moderator</h3>
+<p>Automatic moderation using AI.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Translate</h3>
+<p>Translate messages instantly.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Summary</h3>
+<p>Summarize long conversations.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI FAQ</h3>
+<p>Answer common server questions.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Assistant</h3>
+<p>Server assistant for members.</p>
+<label class="switch"><input type="checkbox" checked><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Coding Helper</h3>
+<p>Programming help inside Discord.</p>
+<label class="switch"><input type="checkbox"><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Anime Helper</h3>
+<p>Anime & manga recommendations.</p>
+<label class="switch"><input type="checkbox"><span></span></label>
+</div>
+
+<div class="module-card">
+<h3>AI Story Helper</h3>
+<p>Story writing assistant.</p>
+<label class="switch"><input type="checkbox"><span></span></label>
+</div>
+
+</div>
+
+</section>
+
+<!-- AI Settings -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+AI Personality
+
+</h2>
+
+<span>
+
+Editor
+
+</span>
+
+</div>
+
+<textarea>
+
+Name : ZELROVA AI
+
+Tone : Friendly
+
+Language : Multi Language
+
+Behavior :
+
+Professional
+
+Helpful
+
+Smart
+
+Fast
+
+Respectful
+
+Anime Friendly
+
+Coding Friendly
+
+</textarea>
+
+<button class="main-btn">
+
+Update Personality
+
+</button>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+AI Statistics
+
+</h2>
+
+<span>
+
+Live
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Questions Today
+
+</span>
+
+<b>
+
+12,584
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Response Time
+
+</span>
+
+<b>
+
+0.7 sec
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Languages
+
+</span>
+
+<b>
+
+50+
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Accuracy
+
+</span>
+
+<b>
+
+98.6%
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Status
+
+</span>
+
+<b>
+
+Healthy
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Recent -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent AI Activity
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>AI answered coding question.</li>
+
+<li>Anime recommendation generated.</li>
+
+<li>Conversation summarized.</li>
+
+<li>Translation completed.</li>
+
+<li>Spam detected by AI Moderator.</li>
+
+<li>Welcome message generated.</li>
+
+</ul>
+
+</section>
+
+<!-- Future AI -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Future AI Modules
+
+</h2>
+
+<span>
+
+Coming Soon
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+<h3>Voice AI</h3>
+<p>Voice conversations.</p>
+</div>
+
+<div class="module-card">
+<h3>Vision AI</h3>
+<p>Image understanding.</p>
+</div>
+
+<div class="module-card">
+<h3>Custom AI</h3>
+<p>Train your own AI personality.</p>
+</div>
+
+<div class="module-card">
+<h3>Memory AI</h3>
+<p>Remember server context.</p>
+</div>
+
+<div class="module-card">
+<h3>Plugin AI</h3>
+<p>Extend AI with plugins.</p>
+</div>
+
+<div class="module-card">
+<h3>Voice Moderator</h3>
+<p>Voice channel moderation.</p>
+</div>
+
+</div>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • AI Center
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

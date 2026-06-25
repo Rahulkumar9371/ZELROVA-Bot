@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Whitelist</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Whitelist System</p>
+    </div>
+  </div>
+
+  <nav class="side-nav">
+    <a href="/dashboard">⚡ Dashboard</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/analytics">📈 Analytics</a>
+    <a href="/announcements">📢 Announcements</a>
+    <a href="/backups">☁ Backup</a>
+    <a href="/ai">🧠 AI Center</a>
+    <a href="/owner-panel">👑 Owner Panel</a>
+    <a class="active" href="/whitelist">⭐ Whitelist</a>
+  </nav>
+
+  <div class="premium-card">
+    <span>ACCESS CONTROL</span>
+    <h3>Trusted Only</h3>
+    <p>Control trusted servers, users, owners and safe permissions.</p>
+    <button>Save Whitelist</button>
+  </div>
+</aside>
+
+<main class="main-panel">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div>
+      <h1>Whitelist</h1>
+      <p>Manage trusted servers, users and owner-only access.</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost-btn">Reset</button>
+      <button class="main-btn" id="saveAllBtn">Save Whitelist</button>
+    </div>
+  </header>
+
+  <section class="hero-panel glass-card">
+    <div>
+      <span class="tag">Security Access</span>
+      <h2>Trusted Server & User Control</h2>
+      <p>ZELROVA can stay limited to approved servers and trusted owners. Other servers need permission before using premium control.</p>
+    </div>
+
+    <div class="server-status">
+      <span class="status-dot"></span>
+      <div>
+        <h3>Whitelist Active</h3>
+        <p>Permission mode enabled</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Whitelist Modules</h2>
+      <span>Access Rules</span>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-card"><h3>Server Whitelist</h3><p>Only approved servers can use ZELROVA.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>User Whitelist</h3><p>Trusted users get special access.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Owner Access</h3><p>Owner-only dashboard and commands.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Permission Requests</h3><p>Servers request approval before use.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Blacklist System</h3><p>Block dangerous users or servers.</p><label class="switch"><input type="checkbox"><span></span></label></div>
+      <div class="module-card"><h3>Audit Access</h3><p>Log every access change.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+    </div>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Add Trusted IDs</h2>
+        <span>Server / User</span>
+      </div>
+      <textarea>Server IDs:
+123456789012345678
+
+User IDs:
+987654321098765432</textarea>
+      <button class="main-btn">Update Access</button>
+    </div>
+
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Access Status</h2>
+        <span>Live</span>
+      </div>
+      <div class="status-list">
+        <div><span>Whitelist</span><b>Enabled</b></div>
+        <div><span>Trusted Servers</span><b>1</b></div>
+        <div><span>Trusted Users</span><b>1</b></div>
+        <div><span>Blocked Servers</span><b>0</b></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast">Saved successfully</div>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

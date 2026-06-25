@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Reaction Roles</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- Sidebar -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+
+<h2>ZELROVA</h2>
+
+<p>Reaction Roles</p>
+
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+
+<a href="/moderation">🛡 Moderation</a>
+
+<a href="/security">🔐 Security</a>
+
+<a href="/automod">🤖 AutoMod</a>
+
+<a href="/welcome">👋 Welcome</a>
+
+<a class="active" href="/reaction-roles">🎭 Reaction Roles</a>
+
+<a href="/tickets">🎫 Tickets</a>
+
+<a href="/levels">📊 Levels</a>
+
+<a href="/logs">📜 Logs</a>
+
+<a href="/analytics">📈 Analytics</a>
+
+<a href="/ai">🧠 AI</a>
+
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>ROLE SYSTEM</span>
+
+<h3>Self Roles</h3>
+
+<p>
+
+Allow members to choose roles automatically
+using reactions.
+
+</p>
+
+<button>
+
+Enable Roles
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>Reaction Roles</h1>
+
+<p>Create self assignable server roles.</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Preview
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Save
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 4
+
+</span>
+
+<h2>
+
+Reaction Role Manager
+
+</h2>
+
+<p>
+
+Create unlimited reaction panels for
+games,
+anime,
+notifications,
+events,
+languages,
+platforms,
+pronouns and custom categories.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+Ready
+
+</h3>
+
+<p>
+
+Reaction System Online
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Role Modules
+
+</h2>
+
+<span>
+
+Manager
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>
+
+Reaction Panel
+
+</h3>
+
+<p>
+
+Create unlimited panels.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Game Roles
+
+</h3>
+
+<p>
+
+Minecraft, Valorant,
+CS2 etc.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Anime Roles
+
+</h3>
+
+<p>
+
+Anime fan selections.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Language Roles
+
+</h3>
+
+<p>
+
+English,
+Japanese,
+Hindi,
+etc.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Notification Roles
+
+</h3>
+
+<p>
+
+Ping roles.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Custom Roles
+
+</h3>
+
+<p>
+
+Create your own categories.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Configuration -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Panel Message
+
+</h2>
+
+<span>
+
+Editor
+
+</span>
+
+</div>
+
+<textarea>
+
+React below to receive your server roles.
+
+🎮 Gamer
+
+🎌 Anime
+
+💻 Developer
+
+🎵 Music
+
+📚 Student
+
+🌸 Japanese
+
+</textarea>
+
+<button class="main-btn">
+
+Update Panel
+
+</button>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Statistics
+
+</h2>
+
+<span>
+
+Live
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Panels
+
+</span>
+
+<b>
+
+4
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Roles
+
+</span>
+
+<b>
+
+27
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Users Assigned
+
+</span>
+
+<b>
+
+1642
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Status
+
+</span>
+
+<b>
+
+Running
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Activity -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent Activity
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+New Anime role panel created.
+
+</li>
+
+<li>
+
+Developer role assigned.
+
+</li>
+
+<li>
+
+Gaming role updated.
+
+</li>
+
+<li>
+
+Language roles synchronized.
+
+</li>
+
+<li>
+
+Notification panel edited.
+
+</li>
+
+</ul>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

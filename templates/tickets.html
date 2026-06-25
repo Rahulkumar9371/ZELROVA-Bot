@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZELROVA • Ticket System</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+
+<h2>ZELROVA</h2>
+
+<p>Ticket System</p>
+
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+
+<a href="/moderation">🛡 Moderation</a>
+
+<a href="/security">🔐 Security</a>
+
+<a href="/automod">🤖 AutoMod</a>
+
+<a href="/welcome">👋 Welcome</a>
+
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+
+<a class="active" href="/tickets">🎫 Tickets</a>
+
+<a href="/levels">📊 Levels</a>
+
+<a href="/logs">📜 Logs</a>
+
+<a href="/analytics">📈 Analytics</a>
+
+<a href="/ai">🧠 AI</a>
+
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>SUPPORT CENTER</span>
+
+<h3>Unlimited Tickets</h3>
+
+<p>
+
+Create support panels with transcripts,
+ratings,
+staff claims,
+analytics and categories.
+
+</p>
+
+<button>
+
+Enable Ticket System
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>Ticket System</h1>
+
+<p>Professional support center for your Discord server.</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Preview Panel
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Save Settings
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 5 • Version 5.0
+
+</span>
+
+<h2>
+
+Premium Ticket Management
+
+</h2>
+
+<p>
+
+Support tickets,
+departments,
+staff claim,
+transcripts,
+ticket ratings,
+analytics,
+logs,
+private channels and auto close system.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+Support Online
+
+</h3>
+
+<p>
+
+Ready for members
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Ticket Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Ticket Modules
+
+</h2>
+
+<span>
+
+Support Features
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>Create Ticket</h3>
+
+<p>Allow members to open support tickets.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Ticket Categories</h3>
+
+<p>Billing, Report, Support, Partnership and more.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Claim Ticket</h3>
+
+<p>Assign tickets to staff members.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Close Ticket</h3>
+
+<p>Close and archive completed tickets.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Transcript</h3>
+
+<p>Save complete conversation history.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Ticket Rating</h3>
+
+<p>Collect user feedback after closing.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Auto Close</h3>
+
+<p>Automatically close inactive tickets.</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Staff Notes</h3>
+
+<p>Private notes visible only to staff.</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Ticket Logs</h3>
+
+<p>Store every ticket event securely.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Ticket Configuration -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Ticket Panel
+
+</h2>
+
+<span>
+
+Editor
+
+</span>
+
+</div>
+
+<textarea>
+
+🎫 Welcome to ZELROVA Support
+
+Choose your category below.
+
+• General Support
+
+• Report User
+
+• Partnership
+
+• Billing
+
+• Technical Issue
+
+</textarea>
+
+<button class="main-btn">
+
+Update Ticket Panel
+
+</button>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Support Analytics
+
+</h2>
+
+<span>
+
+Live
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Open Tickets
+
+</span>
+
+<b>
+
+12
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Closed Today
+
+</span>
+
+<b>
+
+37
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Average Response
+
+</span>
+
+<b>
+
+3 min
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Average Rating
+
+</span>
+
+<b>
+
+4.9 / 5
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Support Staff
+
+</span>
+
+<b>
+
+15
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Recent Activity -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent Ticket Activity
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+Ticket #1024 opened by Member.
+
+</li>
+
+<li>
+
+Support staff claimed Ticket #1023.
+
+</li>
+
+<li>
+
+Transcript generated successfully.
+
+</li>
+
+<li>
+
+Ticket rated ★★★★★.
+
+</li>
+
+<li>
+
+Ticket automatically archived.
+
+</li>
+
+<li>
+
+Support analytics updated.
+
+</li>
+
+</ul>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • Ticket System
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

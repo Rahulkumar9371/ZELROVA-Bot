@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZELROVA • Backup & Restore</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- Sidebar -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+
+<h2>ZELROVA</h2>
+
+<p>Backup Center</p>
+
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+<a href="/moderation">🛡 Moderation</a>
+<a href="/security">🔐 Security</a>
+<a href="/automod">🤖 AutoMod</a>
+<a href="/welcome">👋 Welcome</a>
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+<a href="/tickets">🎫 Tickets</a>
+<a href="/levels">📊 Levels</a>
+<a href="/logs">📜 Logs</a>
+<a href="/analytics">📈 Analytics</a>
+<a href="/announcements">📢 Announcements</a>
+
+<a class="active" href="/backups">
+
+☁ Backup
+
+</a>
+
+<a href="/ai">🧠 AI</a>
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>CLOUD BACKUP</span>
+
+<h3>Restore Anytime</h3>
+
+<p>
+
+Create automatic backups,
+restore configurations,
+and secure your server.
+
+</p>
+
+<button>
+
+Create Backup
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>
+
+Backup & Restore
+
+</h1>
+
+<p>
+
+Protect your complete Discord server configuration.
+
+</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Download
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Backup Now
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 9
+
+</span>
+
+<h2>
+
+Automatic Backup System
+
+</h2>
+
+<p>
+
+Backup channels,
+roles,
+permissions,
+tickets,
+levels,
+welcome settings,
+security,
+AutoMod,
+AI,
+and dashboard configuration.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+Protected
+
+</h3>
+
+<p>
+
+Backup Service Active
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Backup Modules
+
+</h2>
+
+<span>
+
+Cloud Protection
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>
+
+Server Settings
+
+</h3>
+
+<p>
+
+Backup configuration.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Roles
+
+</h3>
+
+<p>
+
+Backup all server roles.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Channels
+
+</h3>
+
+<p>
+
+Backup channel structure.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Permissions
+
+</h3>
+
+<p>
+
+Backup permission overwrites.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Tickets
+
+</h3>
+
+<p>
+
+Support data backup.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Levels
+
+</h3>
+
+<p>
+
+XP and economy backup.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+AI Settings
+
+</h3>
+
+<p>
+
+Backup AI configuration.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Cloud Sync
+
+</h3>
+
+<p>
+
+Future cloud synchronization.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Auto Backup
+
+</h3>
+
+<p>
+
+Daily automatic backups.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Dashboard -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Backup Information
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Last Backup
+
+</span>
+
+<b>
+
+Today
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Backup Size
+
+</span>
+
+<b>
+
+12 MB
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Storage
+
+</span>
+
+<b>
+
+JSON
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Restore Ready
+
+</span>
+
+<b>
+
+Yes
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Schedule
+
+</span>
+
+<b>
+
+Daily
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent Backups
+
+</h2>
+
+<span>
+
+History
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+Backup created successfully.
+
+</li>
+
+<li>
+
+Roles synchronized.
+
+</li>
+
+<li>
+
+Settings exported.
+
+</li>
+
+<li>
+
+Levels saved.
+
+</li>
+
+<li>
+
+Security configuration backed up.
+
+</li>
+
+<li>
+
+AI configuration stored.
+
+</li>
+
+</ul>
+
+</div>
+
+</section>
+
+<!-- Restore -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Restore Backup
+
+</h2>
+
+<span>
+
+Safe Restore
+
+</span>
+
+</div>
+
+<textarea>
+
+Select backup file...
+
+Preview backup...
+
+Restore confirmation...
+
+</textarea>
+
+<button class="main-btn">
+
+Restore Selected Backup
+
+</button>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • Backup Center
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

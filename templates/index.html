@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ZELROVA Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topbar">
+    <div class="brand">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+        <div>
+            <h1>ZELROVA <span>Bot</span></h1>
+            <p>Ultimate Discord Experience</p>
+        </div>
+    </div>
+
+    <div class="navlinks">
+        <a href="/">Home</a>
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="#community">Community</a>
+    </div>
+
+    <div class="navbuttons">
+        <a href="{{ invite_url }}">Add Bot</a>
+        <a href="/dashboard">Dashboard</a>
+    </div>
+</nav>
+
+<main class="page">
+
+    <section class="left">
+        <div class="hero-card">
+            <p class="pill">⚡ All-in-One Discord Bot</p>
+            <h2>Power Up Your <span>Discord Server</span></h2>
+            <p class="hero-desc">
+                ZELROVA Bot helps your server with moderation, tickets, levels,
+                security, welcome, logs, automod, roles and dashboard control.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{{ invite_url }}" class="main-btn">🎮 Add ZELROVA Bot</a>
+                <a href="/dashboard" class="ghost-btn">📊 Dashboard</a>
+            </div>
+
+            <div class="stats">
+                <div><b>100+</b><span>Commands</span></div>
+                <div><b>24/7</b><span>Uptime</span></div>
+                <div><b>Secure</b><span>Protection</span></div>
+                <div><b>Fast</b><span>Support</span></div>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            <div class="panel" id="servers">
+                <h3>👑 Servers Using ZELROVA Bot</h3>
+
+                <div class="server-line">
+                    <span>🌐 ZELROVA Official</span>
+                    <b>Leader: Rahul</b>
+                </div>
+
+                <div class="server-line">
+                    <span>🧪 ZELROVA Test Server</span>
+                    <b>Leader: Rahul</b>
+                </div>
+
+                <div class="server-line">
+                    <span>➕ Your Server Here</span>
+                    <b>Add ZELROVA Bot</b>
+                </div>
+
+                <a href="{{ invite_url }}" class="view-link">Add Your Server →</a>
+            </div>
+
+            <div class="panel why">
+                <h3>Why Choose ZELROVA?</h3>
+                <p>✅ Advanced Moderation</p>
+                <p>✅ Powerful Automation</p>
+                <p>✅ Easy Dashboard Control</p>
+                <p>✅ Server Community Features</p>
+
+                <div class="mini-stats">
+                    <span>🔒 Secure</span>
+                    <span>⚡ Fast</span>
+                    <span>🛠 Customizable</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="center-logo">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+    </section>
+
+    <aside class="right" id="community">
+        <div class="community-card">
+            <div class="community-head">
+                <img src="{{ url_for('static', filename='logo.png') }}">
+                <div>
+                    <h2>ZELROVA Community Server</h2>
+                    <p>● Official Community</p>
+                </div>
+            </div>
+
+            <p class="community-text">
+                Join our official Discord server for anime, gaming, coding,
+                English, Japanese, music, manga, story writing and unique ideas.
+            </p>
+
+            <a href="https://discord.gg/32urRvMMHf" class="join-btn">💬 Join ZELROVA Server</a>
+        </div>
+
+        <div class="themes-card">
+            <h2>🧩 Server Themes</h2>
+
+            <div class="theme">🌸 <b>Anime</b><span>Anime talks and recommendations.</span></div>
+            <div class="theme">🎮 <b>Gaming</b><span>Gaming chats, squads and events.</span></div>
+            <div class="theme">💻 <b>Developer</b><span>Developers and tech community.</span></div>
+            <div class="theme">⌨️ <b>Coding</b><span>Python, web dev and projects.</span></div>
+            <div class="theme">🇬🇧 <b>English</b><span>Learn and practice English.</span></div>
+            <div class="theme">🇯🇵 <b>Japanese</b><span>Japanese learning and anime language.</span></div>
+            <div class="theme">🎵 <b>Music</b><span>Music, songs and playlists.</span></div>
+            <div class="theme">📚 <b>Manga</b><span>Manga discussions and updates.</span></div>
+            <div class="theme">✍️ <b>Story Writer</b><span>Story ideas and writing help.</span></div>
+            <div class="theme">💡 <b>Unique Ideas</b><span>Creative ideas and suggestions.</span></div>
+        </div>
+    </aside>
+
+</main>
+
+<footer>© 2026 ZELROVA Bot — Built by Rahul</footer>
+
+</body>
+</html>

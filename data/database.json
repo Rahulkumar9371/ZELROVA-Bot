@@ -1,0 +1,43 @@
+{
+    "bot": {
+        "name": "ZELROVA",
+        "version": "1.0 Foundation",
+        "maintenance": false,
+        "status": "online"
+    },
+    "dashboard": {
+        "theme": "red"
+    },
+    "servers": {
+        "1507291994039255110": {
+            "prefix": "!",
+            "language": "en",
+            "theme": "red",
+            "modules": {
+                "moderation": true,
+                "security": true,
+                "automod": true,
+                "welcome": true,
+                "reaction_roles": true,
+                "tickets": true,
+                "levels": true,
+                "logs": true,
+                "analytics": true,
+                "ai": true,
+                "music": false
+            },
+            "stats": {
+                "warnings": 0,
+                "bans": 0,
+                "tickets": 0,
+                "messages": 0,
+                "joins": 0
+            }
+        }
+    },
+    "users": {},
+    "premium": {
+        "servers": [],
+        "users": []
+    }
+}

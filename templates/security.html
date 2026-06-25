@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZELROVA Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="zelrova-dashboard">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="ZELROVA">
+      <div>
+        <h2>ZELROVA</h2>
+        <p>Security Panel</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a href="/dashboard">⚡ Overview</a>
+      <a href="/moderation">🛡 Moderation</a>
+      <a class="active" href="/security">🔐 Security</a>
+      <a href="/automod">🤖 AutoMod</a>
+      <a href="/welcome">👋 Welcome</a>
+      <a href="/tickets">🎫 Tickets</a>
+      <a href="/levels">📊 Levels</a>
+      <a href="/logs">📜 Logs</a>
+      <a href="/ai">🧠 AI</a>
+      <a href="/owner-panel">👑 Owner Panel</a>
+    </nav>
+
+    <div class="premium-card">
+      <span>SECURITY PRO</span>
+      <h3>Live Protection</h3>
+      <p>Anti raid, anti bot, join lock, role protection and emergency mode.</p>
+      <button>Enable Shield</button>
+    </div>
+  </aside>
+
+  <main class="main-panel">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div>
+        <h1>Security</h1>
+        <p>Protect your server from raids, spam, bots and destruction attacks.</p>
+      </div>
+      <div class="top-actions">
+        <button class="ghost-btn">Scan Server</button>
+        <button class="main-btn" id="saveAllBtn">Save Security</button>
+      </div>
+    </header>
+
+    <section class="hero-panel glass-card">
+      <div>
+        <span class="tag">PHASE 3 — Version 3.0</span>
+        <h2>Advanced Server Protection</h2>
+        <p>Anti raid, anti bot, verification, join lock, anti everyone, anti webhook, anti channel delete, role protection and server destroy prevention.</p>
+      </div>
+      <div class="server-status">
+        <span class="status-dot"></span>
+        <div>
+          <h3>Protected</h3>
+          <p>Security Score 98%</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card">
+      <div class="section-title">
+        <h2>Security Modules</h2>
+        <span>Live Protection</span>
+      </div>
+
+      <div class="module-grid">
+        <div class="module-card"><h3>Anti Raid</h3><p>Detect fast joins and raid patterns.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Anti Bot</h3><p>Block suspicious bot joins.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Verification</h3><p>Verify new members before access.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Join Lock</h3><p>Temporarily stop new joins during raids.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Anti Everyone</h3><p>Prevent everyone/here abuse.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Anti Webhook</h3><p>Detect and block webhook abuse.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Channel Protection</h3><p>Stop mass channel delete attacks.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Role Protection</h3><p>Prevent dangerous role deletion.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+        <div class="module-card"><h3>Emergency Mode</h3><p>Lock server during major attack.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Protection Status</h2>
+          <span>Real-time</span>
+        </div>
+        <div class="status-list">
+          <div><span>Raid Detection</span><b>Online</b></div>
+          <div><span>Webhook Shield</span><b>Active</b></div>
+          <div><span>Role Guard</span><b>Enabled</b></div>
+          <div><span>Backup System</span><b>Ready</b></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="section-title">
+          <h2>Security Logs</h2>
+          <span>Latest</span>
+        </div>
+        <ul class="activity-list">
+          <li>Security shield loaded successfully.</li>
+          <li>Anti raid system is active.</li>
+          <li>Role protection connected.</li>
+          <li>Emergency security mode ready.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Saved successfully</div>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

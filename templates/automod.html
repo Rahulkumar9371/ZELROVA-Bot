@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZELROVA • AutoMod</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+        <div>
+            <h2>ZELROVA</h2>
+            <p>Auto Moderation</p>
+        </div>
+    </div>
+
+    <nav class="side-nav">
+
+        <a href="/dashboard">⚡ Dashboard</a>
+        <a href="/moderation">🛡 Moderation</a>
+        <a href="/security">🔐 Security</a>
+        <a class="active" href="/automod">🤖 AutoMod</a>
+        <a href="/welcome">👋 Welcome</a>
+        <a href="/tickets">🎫 Tickets</a>
+        <a href="/levels">📊 Levels</a>
+        <a href="/logs">📜 Logs</a>
+        <a href="/analytics">📈 Analytics</a>
+        <a href="/ai">🧠 AI</a>
+        <a href="/owner-panel">👑 Owner Panel</a>
+
+    </nav>
+
+    <div class="premium-card">
+
+        <span>SMART AUTOMOD</span>
+
+        <h3>24/7 Protection</h3>
+
+        <p>
+
+            Automatic spam detection, bad words,
+            scam links, mention spam and AI moderation.
+
+        </p>
+
+        <button>Enable AutoMod</button>
+
+    </div>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>Auto Moderation</h1>
+
+<p>Automatic protection without staff intervention.</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Reset
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Save Changes
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 2 • AutoMod
+
+</span>
+
+<h2>
+
+AI Powered Automatic Moderation
+
+</h2>
+
+<p>
+
+Automatically detect spam,
+bad words,
+duplicate messages,
+caps,
+emoji spam,
+mention spam,
+raid behaviour,
+invite links,
+scam links and much more.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>Protection Active</h3>
+
+<p>Scanning every message...</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+AutoMod Modules
+
+</h2>
+
+<span>
+
+Live Filters
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>Bad Words</h3>
+
+<p>Delete offensive language automatically.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Spam Filter</h3>
+
+<p>Detect repeated messages and spam.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Invite Links</h3>
+
+<p>Block Discord invite advertisements.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Scam Links</h3>
+
+<p>Detect phishing and scam websites.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Mention Spam</h3>
+
+<p>Stop mass mentions automatically.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Emoji Spam</h3>
+
+<p>Remove excessive emoji messages.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Caps Spam</h3>
+
+<p>Detect ALL CAPS abuse.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Duplicate Messages</h3>
+
+<p>Delete repeated messages.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Flood Detection</h3>
+
+<p>Detect message flooding instantly.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- AI AutoMod -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+AI Auto Moderator
+
+</h2>
+
+<span>
+
+Smart Detection
+
+</span>
+
+</div>
+
+<p>
+
+AI analyzes messages before taking action.
+
+It can warn,
+
+timeout,
+
+delete,
+
+or report suspicious users.
+
+</p>
+
+<textarea>
+
+AI Personality:
+Strict but friendly moderation.
+
+</textarea>
+
+<button class="main-btn">
+
+Update AI
+
+</button>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Detection Status
+
+</h2>
+
+<span>
+
+Live
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Bad Words
+
+</span>
+
+<b>
+
+Enabled
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Spam
+
+</span>
+
+<b>
+
+Enabled
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Scam Shield
+
+</span>
+
+<b>
+
+Running
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+AI Engine
+
+</span>
+
+<b>
+
+Online
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Detection Accuracy
+
+</span>
+
+<b>
+
+98%
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Recent -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent AutoMod Activity
+
+</h2>
+
+<span>
+
+Latest Events
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+Blocked spam message from User#0001
+
+</li>
+
+<li>
+
+Deleted scam link automatically
+
+</li>
+
+<li>
+
+Removed excessive emoji spam
+
+</li>
+
+<li>
+
+Timeout applied after AI analysis
+
+</li>
+
+<li>
+
+Mention spam detected
+
+</li>
+
+<li>
+
+Invite link removed
+
+</li>
+
+</ul>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

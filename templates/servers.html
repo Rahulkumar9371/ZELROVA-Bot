@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZELROVA • Server Manager</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+<h2>ZELROVA</h2>
+<p>Server Manager</p>
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+<a href="/moderation">🛡 Moderation</a>
+<a href="/security">🔐 Security</a>
+<a href="/automod">🤖 AutoMod</a>
+<a href="/welcome">👋 Welcome</a>
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+<a href="/tickets">🎫 Tickets</a>
+<a href="/levels">📊 Levels</a>
+<a href="/logs">📜 Logs</a>
+<a href="/analytics">📈 Analytics</a>
+<a href="/announcements">📢 Announcements</a>
+<a href="/backups">☁ Backup</a>
+<a href="/ai">🧠 AI Center</a>
+<a href="/owner-panel">👑 Owner Panel</a>
+
+<a class="active" href="/servers">
+
+🌐 Servers
+
+</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>MULTI SERVER</span>
+
+<h3>Global Network</h3>
+
+<p>
+
+Manage every Discord server connected to ZELROVA.
+
+</p>
+
+<button>
+
+Add Server
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>
+
+Server Manager
+
+</h1>
+
+<p>
+
+Manage all connected Discord servers from one dashboard.
+
+</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Refresh
+
+</button>
+
+<button class="main-btn">
+
+Scan Servers
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+MULTI SERVER CONTROL
+
+</span>
+
+<h2>
+
+Manage Every Server
+
+</h2>
+
+<p>
+
+View,
+configure,
+backup,
+protect,
+and monitor all connected Discord servers from one premium dashboard.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+128 Servers
+
+</h3>
+
+<p>
+
+All Connected
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Stats -->
+
+<section class="stats-grid">
+
+<div class="stat-card glass-card">
+
+<span>
+
+Connected Servers
+
+</span>
+
+<h2>
+
+128
+
+</h2>
+
+<p>
+
++3 Today
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Total Members
+
+</span>
+
+<h2>
+
+248K
+
+</h2>
+
+<p>
+
+Growing
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Premium Servers
+
+</span>
+
+<h2>
+
+18
+
+</h2>
+
+<p>
+
+Active
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Health
+
+</span>
+
+<h2>
+
+99%
+
+</h2>
+
+<p>
+
+Excellent
+
+</p>
+
+</div>
+
+</section>
+
+<!-- Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Server Features
+
+</h2>
+
+<span>
+
+Manager
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>
+
+Server Detection
+
+</h3>
+
+<p>
+
+Automatically detect new servers.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Multi Server
+
+</h3>
+
+<p>
+
+Manage unlimited servers.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Server Health
+
+</h3>
+
+<p>
+
+Analyze server performance.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Auto Backup
+
+</h3>
+
+<p>
+
+Backup every connected server.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Premium Status
+
+</h3>
+
+<p>
+
+Premium subscription checker.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>
+
+Sync Settings
+
+</h3>
+
+<p>
+
+Synchronize dashboard settings.
+
+</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Server List -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Connected Servers
+
+</h2>
+
+<span>
+
+Preview
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+🟢 ZELROVA Community
+— 24,000 Members
+
+</li>
+
+<li>
+
+🟢 Anime World
+— 12,800 Members
+
+</li>
+
+<li>
+
+🟢 Coding Hub
+— 9,500 Members
+
+</li>
+
+<li>
+
+🟢 Gaming Zone
+— 18,200 Members
+
+</li>
+
+<li>
+
+🟢 English Learning
+— 7,400 Members
+
+</li>
+
+<li>
+
+🟢 Japanese Club
+— 5,900 Members
+
+</li>
+
+</ul>
+
+</section>
+
+<!-- Analytics -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Server Analytics
+
+</h2>
+
+<span>
+
+Overview
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div>
+
+<span>
+
+Messages Today
+
+</span>
+
+<b>
+
+1.2M
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Commands Used
+
+</span>
+
+<b>
+
+95K
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Tickets
+
+</span>
+
+<b>
+
+243
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+Warnings
+
+</span>
+
+<b>
+
+64
+
+</b>
+
+</div>
+
+<div>
+
+<span>
+
+New Members
+
+</span>
+
+<b>
+
+518
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Recent Activity
+
+</h2>
+
+<span>
+
+Latest
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>
+
+New server connected.
+
+</li>
+
+<li>
+
+Backup completed.
+
+</li>
+
+<li>
+
+Server health checked.
+
+</li>
+
+<li>
+
+Premium activated.
+
+</li>
+
+<li>
+
+Dashboard synchronized.
+
+</li>
+
+<li>
+
+Statistics refreshed.
+
+</li>
+
+</ul>
+
+</div>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • Server Manager
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

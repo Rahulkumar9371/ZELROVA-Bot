@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZELROVA Welcome</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="zelrova-dashboard">
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="ZELROVA">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Community System</p>
+    </div>
+  </div>
+
+  <nav class="side-nav">
+    <a href="/dashboard">⚡ Overview</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a class="active" href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/ai">🧠 AI</a>
+    <a href="/owner-panel">👑 Owner Panel</a>
+  </nav>
+
+  <div class="premium-card">
+    <span>COMMUNITY PRO</span>
+    <h3>Beautiful Entry</h3>
+    <p>Welcome cards, leave cards, auto role, boost message and counters.</p>
+    <button>Enable Welcome</button>
+  </div>
+</aside>
+
+<main class="main-panel">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div>
+      <h1>Welcome System</h1>
+      <p>Create a premium first impression for every new member.</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost-btn">Preview Card</button>
+      <button class="main-btn" id="saveAllBtn">Save Welcome</button>
+    </div>
+  </header>
+
+  <section class="hero-panel glass-card">
+    <div>
+      <span class="tag">PHASE 4 — Version 4.0</span>
+      <h2>Premium Community Welcome System</h2>
+      <p>Welcome card, leave card, auto role, reaction role, boost message, rules panel, autorename, server counter, birthdays and community stats.</p>
+    </div>
+
+    <div class="server-status">
+      <span class="status-dot"></span>
+      <div>
+        <h3>Active</h3>
+        <p>Greeting new members</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Community Modules</h2>
+      <span>Editable</span>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-card"><h3>Welcome Card</h3><p>Send beautiful welcome card when users join.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Leave Card</h3><p>Send leave card when members exit server.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Auto Role</h3><p>Automatically assign role to new members.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Welcome DM</h3><p>Send private welcome message with server guide.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Boost Message</h3><p>Celebrate server boosters with premium message.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Rules Panel</h3><p>Show rules and guide for new users.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Autorename</h3><p>Rename members using server format.</p><label class="switch"><input type="checkbox"><span></span></label></div>
+      <div class="module-card"><h3>Server Counter</h3><p>Live member, bot and boost counters.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Birthdays</h3><p>Birthday wishes and birthday role system.</p><label class="switch"><input type="checkbox"><span></span></label></div>
+    </div>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Welcome Message</h2>
+        <span>Custom Text</span>
+      </div>
+      <textarea>Welcome {user} to {server}! Read the rules and enjoy the ZELROVA community.</textarea>
+      <button class="main-btn">Update Message</button>
+    </div>
+
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Community Stats</h2>
+        <span>Live</span>
+      </div>
+      <div class="status-list">
+        <div><span>Total Members</span><b>24.8K</b></div>
+        <div><span>New Today</span><b>128</b></div>
+        <div><span>Boosters</span><b>42</b></div>
+        <div><span>Auto Roles</span><b>Enabled</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Recent Welcome Activity</h2>
+      <span>Latest</span>
+    </div>
+    <ul class="activity-list">
+      <li>New member welcomed successfully.</li>
+      <li>Auto role assigned to new user.</li>
+      <li>Boost message system loaded.</li>
+      <li>Community stats updated.</li>
+    </ul>
+  </section>
+</main>
+
+<div class="toast" id="toast">Saved successfully</div>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

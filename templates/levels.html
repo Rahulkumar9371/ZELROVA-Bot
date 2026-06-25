@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Levels</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="zelrova-dashboard">
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Level System</p>
+    </div>
+  </div>
+
+  <nav class="side-nav">
+    <a href="/dashboard">⚡ Dashboard</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a class="active" href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/analytics">📈 Analytics</a>
+    <a href="/ai">🧠 AI</a>
+    <a href="/owner-panel">👑 Owner Panel</a>
+  </nav>
+
+  <div class="premium-card">
+    <span>XP ECONOMY</span>
+    <h3>Engagement Engine</h3>
+    <p>XP, ranks, coins, shop, inventory, achievements and rewards.</p>
+    <button>Enable Levels</button>
+  </div>
+</aside>
+
+<main class="main-panel">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div>
+      <h1>Levels & Economy</h1>
+      <p>Reward active members and build community competition.</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost-btn">Reset XP</button>
+      <button class="main-btn" id="saveAllBtn">Save Levels</button>
+    </div>
+  </header>
+
+  <section class="hero-panel glass-card">
+    <div>
+      <span class="tag">PHASE 6 — Version 6.0</span>
+      <h2>XP, Levels, Economy & Rewards</h2>
+      <p>Complete ranking system with XP, leaderboard, rank cards, coins, economy, achievements, shop, inventory and daily rewards.</p>
+    </div>
+
+    <div class="server-status">
+      <span class="status-dot"></span>
+      <div>
+        <h3>XP Active</h3>
+        <p>Tracking messages</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Level Modules</h2>
+      <span>Reward controls</span>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-card"><h3>XP System</h3><p>Give XP for active chatting.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Levels</h3><p>Level up members automatically.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Leaderboard</h3><p>Show top active members.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Rank Cards</h3><p>Premium visual rank profile cards.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Coins</h3><p>Earn coins with activity.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Economy</h3><p>Server money system and rewards.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Achievements</h3><p>Unlock badges and milestones.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Shop</h3><p>Buy roles, perks and items.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+      <div class="module-card"><h3>Daily Rewards</h3><p>Daily coins and streak system.</p><label class="switch"><input type="checkbox" checked><span></span></label></div>
+    </div>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>XP Settings</h2>
+        <span>Editable</span>
+      </div>
+      <div class="status-list">
+        <div><span>XP Per Message</span><b>15–25</b></div>
+        <div><span>Cooldown</span><b>60 sec</b></div>
+        <div><span>Level Up Message</span><b>Enabled</b></div>
+        <div><span>Voice XP</span><b>Future</b></div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <div class="section-title">
+        <h2>Top Members</h2>
+        <span>Leaderboard</span>
+      </div>
+      <ul class="activity-list">
+        <li>#1 Rahul — Level 42</li>
+        <li>#2 Anime Master — Level 38</li>
+        <li>#3 Code Ninja — Level 35</li>
+        <li>#4 Music King — Level 31</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="glass-card">
+    <div class="section-title">
+      <h2>Economy Activity</h2>
+      <span>Latest</span>
+    </div>
+    <ul class="activity-list">
+      <li>User earned 25 XP.</li>
+      <li>Daily reward claimed successfully.</li>
+      <li>Achievement unlocked: Active Member.</li>
+      <li>Shop item purchased with coins.</li>
+    </ul>
+  </section>
+</main>
+
+<div class="toast" id="toast">Saved successfully</div>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

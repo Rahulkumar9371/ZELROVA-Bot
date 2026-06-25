@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZELROVA • Analytics</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="zelrova-dashboard">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+
+<img src="{{ url_for('static', filename='logo.png') }}">
+
+<div>
+
+<h2>ZELROVA</h2>
+
+<p>Analytics Center</p>
+
+</div>
+
+</div>
+
+<nav class="side-nav">
+
+<a href="/dashboard">⚡ Dashboard</a>
+
+<a href="/moderation">🛡 Moderation</a>
+
+<a href="/security">🔐 Security</a>
+
+<a href="/automod">🤖 AutoMod</a>
+
+<a href="/welcome">👋 Welcome</a>
+
+<a href="/reaction-roles">🎭 Reaction Roles</a>
+
+<a href="/tickets">🎫 Tickets</a>
+
+<a href="/levels">📊 Levels</a>
+
+<a href="/logs">📜 Logs</a>
+
+<a class="active" href="/analytics">📈 Analytics</a>
+
+<a href="/announcements">📢 Announcements</a>
+
+<a href="/ai">🧠 AI</a>
+
+<a href="/owner-panel">👑 Owner Panel</a>
+
+</nav>
+
+<div class="premium-card">
+
+<span>DASHBOARD PRO</span>
+
+<h3>Live Analytics</h3>
+
+<p>
+
+Track server growth,
+activity,
+voice usage,
+commands,
+security,
+AI and health score.
+
+</p>
+
+<button>
+
+Refresh Analytics
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main-panel">
+
+<header class="topbar">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<div>
+
+<h1>Analytics Dashboard</h1>
+
+<p>
+
+Real-time server statistics and performance overview.
+
+</p>
+
+</div>
+
+<div class="top-actions">
+
+<button class="ghost-btn">
+
+Export Report
+
+</button>
+
+<button class="main-btn" id="saveAllBtn">
+
+Refresh
+
+</button>
+
+</div>
+
+</header>
+
+<!-- Hero -->
+
+<section class="hero-panel glass-card">
+
+<div>
+
+<span class="tag">
+
+PHASE 9 • Dashboard PRO
+
+</span>
+
+<h2>
+
+Server Analytics Center
+
+</h2>
+
+<p>
+
+Monitor member growth,
+message activity,
+voice activity,
+command usage,
+server health,
+heatmaps,
+security reports,
+invite tracking and engagement.
+
+</p>
+
+</div>
+
+<div class="server-status">
+
+<span class="status-dot"></span>
+
+<div>
+
+<h3>
+
+Live Tracking
+
+</h3>
+
+<p>
+
+Updating every minute
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Stats -->
+
+<section class="stats-grid">
+
+<div class="stat-card glass-card">
+
+<span>
+
+Members
+
+</span>
+
+<h2>
+
+24,861
+
+</h2>
+
+<p>
+
++132 Today
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Messages
+
+</span>
+
+<h2>
+
+1.8M
+
+</h2>
+
+<p>
+
+Today 52K
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Commands
+
+</span>
+
+<h2>
+
+932K
+
+</h2>
+
+<p>
+
+Active
+
+</p>
+
+</div>
+
+<div class="stat-card glass-card">
+
+<span>
+
+Health Score
+
+</span>
+
+<h2>
+
+98%
+
+</h2>
+
+<p>
+
+Excellent
+
+</p>
+
+</div>
+
+</section>
+
+<!-- Analytics -->
+
+<section class="dashboard-grid">
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Server Growth
+
+</h2>
+
+<span>
+
+30 Days
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div><span>New Members</span><b>+2,418</b></div>
+
+<div><span>Messages</span><b>1,832,512</b></div>
+
+<div><span>Voice Hours</span><b>5,274h</b></div>
+
+<div><span>Boost Level</span><b>Level 3</b></div>
+
+<div><span>Retention</span><b>93%</b></div>
+
+</div>
+
+</div>
+
+<div class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Moderation Report
+
+</h2>
+
+<span>
+
+Last 30 Days
+
+</span>
+
+</div>
+
+<div class="status-list">
+
+<div><span>Warnings</span><b>162</b></div>
+
+<div><span>Timeouts</span><b>58</b></div>
+
+<div><span>Bans</span><b>17</b></div>
+
+<div><span>Spam Removed</span><b>2,304</b></div>
+
+<div><span>Raid Attempts</span><b>5 Blocked</b></div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Analytics Modules -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Analytics Modules
+
+</h2>
+
+<span>
+
+Dashboard PRO
+
+</span>
+
+</div>
+
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>Member Growth</h3>
+
+<p>Daily, weekly and monthly growth.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Message Analytics</h3>
+
+<p>Track message activity.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Voice Analytics</h3>
+
+<p>Voice usage reports.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Command Usage</h3>
+
+<p>Most used commands.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Heatmap</h3>
+
+<p>Most active time of day.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Invite Tracking</h3>
+
+<p>Track invite links.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Security Report</h3>
+
+<p>Protection summary.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>AI Insights</h3>
+
+<p>AI generated server recommendations.</p>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span></span>
+
+</label>
+
+</div>
+
+<div class="module-card">
+
+<h3>Export Reports</h3>
+
+<p>Download CSV & JSON reports.</p>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Activity -->
+
+<section class="glass-card">
+
+<div class="section-title">
+
+<h2>
+
+Latest Analytics Events
+
+</h2>
+
+<span>
+
+Recent
+
+</span>
+
+</div>
+
+<ul class="activity-list">
+
+<li>Member activity updated.</li>
+
+<li>Server health recalculated.</li>
+
+<li>Message analytics synchronized.</li>
+
+<li>Heatmap generated successfully.</li>
+
+<li>Invite statistics refreshed.</li>
+
+<li>AI insight report created.</li>
+
+</ul>
+
+</section>
+
+<footer class="dashboard-footer">
+
+© 2026 ZELROVA Bot • Analytics Center
+
+</footer>
+
+</main>
+
+<div class="toast" id="toast">
+
+Saved Successfully
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>
