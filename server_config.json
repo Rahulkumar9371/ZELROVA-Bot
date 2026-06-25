@@ -1,3 +1,29 @@
 {
-    "1507291994039255110": {}
+    "server_name": "ZELROVA Community",
+    "server_id": "",
+    "prefix": "!",
+    "language": "English",
+    "theme": "dark-red-purple-blue",
+    "bot_status": "Online",
+    "maintenance_mode": false,
+    "developer_mode": false,
+    "premium": false,
+    "modules": {
+        "moderation": true,
+        "security": true,
+        "automod": true,
+        "welcome": true,
+        "reaction_roles": true,
+        "tickets": true,
+        "levels": true,
+        "logs": true,
+        "announcements": true,
+        "analytics": true,
+        "backup": true,
+        "ai": true,
+        "community": true,
+        "owner_panel": true,
+        "whitelist": true,
+        "servers": true
+    }
 }

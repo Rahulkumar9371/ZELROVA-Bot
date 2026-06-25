@@ -1,0 +1,99 @@
+{
+    "server_config": {
+        "server_name": "ZELROVA Community",
+        "server_id": "",
+        "prefix": "!",
+        "language": "English",
+        "theme": "dark-red-purple-blue",
+        "bot_status": "Online",
+        "maintenance_mode": false,
+        "developer_mode": false,
+        "premium": false,
+        "modules": {
+            "moderation": true,
+            "security": true,
+            "automod": true,
+            "welcome": true,
+            "reaction_roles": true,
+            "tickets": true,
+            "levels": true,
+            "logs": true,
+            "announcements": true,
+            "analytics": true,
+            "backup": true,
+            "ai": true,
+            "community": true,
+            "owner_panel": true,
+            "whitelist": true,
+            "servers": true
+        }
+    },
+    "automod": {
+        "bad_words": true,
+        "spam_protection": true,
+        "invite_links": true,
+        "scam_links": true,
+        "mention_spam": true,
+        "emoji_spam": true,
+        "caps_spam": true,
+        "duplicate_messages": true,
+        "mass_ping": true,
+        "flood_detection": true,
+        "auto_timeout": true,
+        "auto_kick": false,
+        "auto_ban": false
+    },
+    "announcements": {
+        "enabled": true,
+        "channel_id": "",
+        "last_message": "",
+        "scheduled": []
+    },
+    "levels": {
+        "1507291994039255110": {
+            "1014889746750767204": {
+                "xp": 21,
+                "level": 1
+            }
+        }
+    },
+    "logs": {
+        "enabled": true,
+        "moderation_logs": [],
+        "security_logs": [],
+        "ticket_logs": [],
+        "system_logs": []
+    },
+    "reaction_roles": {
+        "enabled": true,
+        "roles": []
+    },
+    "tickets": {
+        "enabled": true,
+        "categories": [],
+        "open_tickets": [],
+        "closed_tickets": [],
+        "transcripts": true,
+        "rating": true,
+        "analytics": true
+    },
+    "warnings": {
+        "users": {}
+    },
+    "whitelist": {
+        "enabled": true,
+        "servers": [],
+        "users": [],
+        "owners": []
+    },
+    "stats": {
+        "servers": 1,
+        "users": 24800,
+        "commands": 91000,
+        "security_score": 98,
+        "latency": "42ms",
+        "database": "JSON Active",
+        "hosting": "Render Working",
+        "dashboard": "Routes Active"
+    }
+}

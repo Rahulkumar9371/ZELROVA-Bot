@@ -1,1 +1,12 @@
-{}
+{
+    "enabled": true,
+    "moderation_logs": [],
+    "security_logs": [],
+    "ticket_logs": [],
+    "system_logs": [
+        {
+            "message": "Backup created: zelrova_backup_20260625_185807.json",
+            "time": "2026-06-25 18:58:07"
+        }
+    ]
+}
