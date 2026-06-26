@@ -14,8 +14,11 @@ app.secret_key = Config.SECRET_KEY
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-BOT_CLIENT_ID = Config.CLIENT_ID
-CLIENT_SECRET = Config.CLIENT_SECRET
+BOT_CLIENT_ID = os.getenv("CLIENT_ID") or os.getenv("APPLICATION_ID") or str(Config.CLIENT_ID)
+CLIENT_SECRET = os.getenv("CLIENT_SECRET") or str(Config.CLIENT_SECRET)
+
+if not BOT_CLIENT_ID:
+    print("ERROR: CLIENT_ID missing")
 OWNER_ID = str(Config.OWNER_ID)
 REDIRECT_URI = os.getenv("REDIRECT_URI", "http://127.0.0.1:5000/callback")
 DISCORD_SERVER_INVITE = Config.DISCORD_SERVER_INVITE
