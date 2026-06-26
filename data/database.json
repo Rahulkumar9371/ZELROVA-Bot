@@ -5,7 +5,7 @@
         "status": "online",
         "maintenance": false,
         "developer_mode": false,
-        "last_ready": "2026-06-26 14:05:59",
+        "last_ready": "2026-06-26 14:42:24",
         "servers": 2,
         "users": 18
     },
@@ -81,7 +81,8 @@
             "server_id": "1507291994039255110",
             "owner_id": "1014889746750767204",
             "member_count": 14,
-            "icon_url": "https://cdn.discordapp.com/icons/1507291994039255110/0152431e7c3e34da234fed3be2e6b1b3.png?size=1024"
+            "icon_url": "https://cdn.discordapp.com/icons/1507291994039255110/0152431e7c3e34da234fed3be2e6b1b3.png?size=1024",
+            "bot_joined": true
         },
         "1474253939795824721": {
             "prefix": "!",
@@ -142,22 +143,23 @@
                 "bans": 0,
                 "kicks": 0,
                 "tickets": 0,
-                "messages": 20,
+                "messages": 22,
                 "joins": 0,
-                "commands": 16
+                "commands": 18
             },
             "server_name": "𝐑𝐄𝐕𝐎’𝐒 𝐄𝐑𝐀 | 𝐓𝐇𝐄 𝐋𝐄𝐆𝐄𝐍𝐃 𝐄𝐌𝐏𝐈𝐑𝐄",
             "server_id": "1474253939795824721",
             "owner_id": "952888657751203851",
             "member_count": 4,
-            "icon_url": "https://cdn.discordapp.com/icons/1474253939795824721/c5b3c9b5b0eebd83437fb2a7430e43dd.png?size=1024"
+            "icon_url": "https://cdn.discordapp.com/icons/1474253939795824721/c5b3c9b5b0eebd83437fb2a7430e43dd.png?size=1024",
+            "bot_joined": true
         }
     },
     "users": {
         "1474253939795824721-1014889746750767204": {
-            "xp": 126,
+            "xp": 148,
             "level": 2,
-            "coins": 37,
+            "coins": 40,
             "inventory": [],
             "achievements": [],
             "last_daily": null

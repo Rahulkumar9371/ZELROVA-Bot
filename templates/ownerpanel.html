@@ -1,18 +1,272 @@
 <!DOCTYPE html>
-<html>
-<head><title>Owner Panel</title><link rel="stylesheet" href="/static/style.css"></head>
-<body>
-<nav class="navbar"><div class="brand"><img src="/static/logo.png" class="nav-logo"><h2>Owner Panel</h2></div><div class="nav-links"><a href="/dashboard/{{ server_id }}">Back</a></div></nav>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZELROVA • Owner Panel</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-<section class="dashboard">
-    <h1>👑 Owner Control Panel</h1>
-    <p>High security controls for ZELROVA owner.</p>
+<body class="zelrova-dashboard">
 
-    <div class="dashboard-grid">
-        <div class="dash-card"><h3>🛡️ Server Protection</h3><p>Whitelist and anti-raid control.</p></div>
-        <div class="dash-card"><h3>📜 Logs</h3><p>Audit activity overview.</p></div>
-        <div class="dash-card"><h3>🤖 Bot Status</h3><p>Online and connected.</p></div>
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Owner Control</p>
     </div>
+  </div>
+
+  <nav class="side-nav">
+    <a href="/dashboard">⚡ Overview</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/analytics">📈 Analytics</a>
+    <a href="/announcements">📢 Announcements</a>
+    <a href="/backups">☁ Backup</a>
+    <a href="/ai">🧠 AI</a>
+    <a class="active" href="/owner-panel">👑 Owner Panel</a>
+    <a href="/whitelist">⭐ Whitelist</a>
+    <a href="/servers">🌐 Servers</a>
+  </nav>
+
+  <div class="premium-card">
+    <span>OWNER ONLY</span>
+    <h3>Private Access</h3>
+    <p>Only the real owner can control global bot actions.</p>
+    <button>Secured</button>
+  </div>
+</aside>
+
+<main class="main-panel">
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <div>
+    <h1>Owner Panel</h1>
+    <p>Private ZELROVA master control center.</p>
+  </div>
+
+  <div class="top-actions">
+    <a class="ghost-btn" href="/logout">Logout</a>
+    <button class="main-btn" id="saveAllBtn">Save Owner</button>
+  </div>
+</header>
+
+<section class="hero-panel glass-card">
+  <div>
+    <span class="tag">👑 OWNER VERIFIED</span>
+    <h2>Ultimate ZELROVA Control</h2>
+    <p>Server control, live actions, broadcast, premium manager, developer mode and private leave-server system.</p>
+  </div>
+
+  <div class="server-status">
+    <span class="status-dot"></span>
+    <div>
+      <h3>Owner Active</h3>
+      <p>{{ data.owner.username if data.owner else "Owner" }}</p>
+    </div>
+  </div>
 </section>
+
+<section class="stats-grid">
+  <div class="stat-card glass-card">
+    <span>Connected Servers</span>
+    <h2>{{ data.stats.servers }}</h2>
+    <p>Live network</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Total Users</span>
+    <h2>{{ data.stats.users }}</h2>
+    <p>Across servers</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Commands</span>
+    <h2>{{ data.stats.commands }}</h2>
+    <p>Global usage</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Security</span>
+    <h2>{{ data.stats.security_score }}%</h2>
+    <p>Health score</p>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+
+  <div class="glass-card">
+    <div class="section-title">
+      <h2>🚪 Leave Server</h2>
+      <span>Owner Only</span>
+    </div>
+
+    <p style="line-height:1.8;color:#cfcfe0;">
+      Agar koi server rules break kare ya tumhe bura lage, yahan se ZELROVA Bot ko us server se leave karwa sakte ho.
+    </p>
+
+    <textarea id="leaveServerId" placeholder="Paste Server ID here..."></textarea>
+
+    <button class="main-btn" id="leaveServerBtn">Leave Server</button>
+  </div>
+
+  <div class="glass-card">
+    <div class="section-title">
+      <h2>📢 Global Broadcast</h2>
+      <span>All Servers</span>
+    </div>
+
+    <textarea id="broadcastMessage">📢 ZELROVA Update
+
+New dashboard features are now active.</textarea>
+
+    <button class="main-btn" id="broadcastBtn">Send Broadcast</button>
+  </div>
+
+</section>
+
+<section class="glass-card">
+  <div class="section-title">
+    <h2>Owner Tools</h2>
+    <span>Private Controls</span>
+  </div>
+
+  <div class="module-grid">
+    <div class="module-card">
+      <h3>Bot Status Control</h3>
+      <p>Refresh or update bot presence.</p>
+      <button data-action="Bot Status Control">Run</button>
+    </div>
+
+    <div class="module-card">
+      <h3>Maintenance Mode</h3>
+      <p>Toggle maintenance mode.</p>
+      <button data-action="Maintenance Mode">Toggle</button>
+    </div>
+
+    <div class="module-card">
+      <h3>Developer Mode</h3>
+      <p>Toggle developer mode.</p>
+      <button data-action="Developer Mode">Toggle</button>
+    </div>
+
+    <div class="module-card">
+      <h3>Premium Manager</h3>
+      <p>Premium server management foundation.</p>
+      <button data-action="Premium Manager">Open</button>
+    </div>
+
+    <div class="module-card">
+      <h3>Remote Commands</h3>
+      <p>Queue remote bot actions.</p>
+      <button data-action="Remote Commands">Queue</button>
+    </div>
+
+    <div class="module-card">
+      <h3>Global Ban</h3>
+      <p>Future global ban system.</p>
+      <button data-action="Global Ban">Open</button>
+    </div>
+  </div>
+</section>
+
+<section class="glass-card">
+  <div class="section-title">
+    <h2>🌐 Connected Servers</h2>
+    <span>Live List</span>
+  </div>
+
+  <div class="module-grid">
+    {% if data.server_list %}
+      {% for server in data.server_list %}
+      <div class="module-card">
+        <h3>{{ server.name }}</h3>
+        <p>
+          ID: {{ server.id }}<br>
+          Owner: {{ server.owner }}<br>
+          Members: {{ server.members }}<br>
+          Trust: {{ server.trust_score }}%
+        </p>
+        <button class="server-leave-btn" data-server-id="{{ server.id }}">Leave This Server</button>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="module-card">
+        <h3>No servers yet</h3>
+        <p>Bot server list will appear here after sync.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<footer class="dashboard-footer">
+  © 2026 ZELROVA Bot • Owner Panel
+</footer>
+
+</main>
+
+<div class="toast" id="toast">Owner action saved</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<script>
+async function ownerPost(url, payload){
+  try{
+    const res = await fetch(url,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    const data = await res.json();
+    alert(data.message || "Done");
+  }catch(e){
+    alert("Connection failed");
+  }
+}
+
+const leaveBtn = document.getElementById("leaveServerBtn");
+if(leaveBtn){
+  leaveBtn.addEventListener("click",()=>{
+    const serverId = document.getElementById("leaveServerId").value.trim();
+    if(!serverId){
+      alert("Server ID paste karo.");
+      return;
+    }
+    const ok = confirm("Are you sure? ZELROVA will leave this server.");
+    if(!ok) return;
+    ownerPost("/api/owner/leave-server",{server_id:serverId});
+  });
+}
+
+document.querySelectorAll(".server-leave-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const serverId = btn.dataset.serverId;
+    const ok = confirm("Leave server ID: "+serverId+" ?");
+    if(!ok) return;
+    ownerPost("/api/owner/leave-server",{server_id:serverId});
+  });
+});
+
+const broadcastBtn = document.getElementById("broadcastBtn");
+if(broadcastBtn){
+  broadcastBtn.addEventListener("click",()=>{
+    const message = document.getElementById("broadcastMessage").value.trim();
+    ownerPost("/api/owner/action",{
+      action:"Global Broadcast",
+      payload:{message}
+    });
+  });
+}
+</script>
+
 </body>
 </html>

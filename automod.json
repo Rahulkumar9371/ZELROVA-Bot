@@ -1,15 +1,18 @@
 {
     "bad_words": true,
-    "spam_protection": true,
+    "spam": true,
+    "duplicate_messages": true,
     "invite_links": true,
     "scam_links": true,
     "mention_spam": true,
     "emoji_spam": true,
     "caps_spam": true,
-    "duplicate_messages": true,
     "mass_ping": true,
     "flood_detection": true,
     "auto_timeout": true,
+    "auto_warn": true,
+    "auto_delete": true,
+    "spam_protection": true,
     "auto_kick": false,
     "auto_ban": false
 }

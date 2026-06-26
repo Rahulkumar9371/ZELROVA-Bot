@@ -9,6 +9,8 @@
     "developer_mode": false,
     "premium": false,
     "modules": {
+        "home": true,
+        "overview": true,
         "moderation": true,
         "security": true,
         "automod": true,
@@ -20,11 +22,19 @@
         "announcements": true,
         "analytics": true,
         "backup": true,
+        "restore": true,
         "ai": true,
         "music": false,
         "community": true,
+        "servers": true,
+        "top_trusted_servers": true,
+        "onboarding": true,
         "owner_panel": true,
         "whitelist": true,
-        "servers": true
+        "premium": false,
+        "developer_mode": false,
+        "plugin_manager": false,
+        "theme_engine": true,
+        "api": true
     }
 }

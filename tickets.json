@@ -1,9 +1,13 @@
 {
     "enabled": true,
-    "categories": [],
-    "open_tickets": [],
-    "closed_tickets": [],
     "transcripts": true,
     "rating": true,
-    "analytics": true
+    "analytics": true,
+    "claim": true,
+    "close": true,
+    "staff_notes": true,
+    "support_roles": [],
+    "categories": [],
+    "open_tickets": [],
+    "closed_tickets": []
 }

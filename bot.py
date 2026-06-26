@@ -41,8 +41,47 @@ COGS = [
 DASHBOARD_URL = os.getenv("DASHBOARD_URL", "http://127.0.0.1:5000")
 
 
+def dashboard_get(endpoint):
+    try:
+        response = requests.get(
+            f"{DASHBOARD_URL}{endpoint}",
+            timeout=5
+        )
+        if response.status_code == 200:
+            return response.json()
+    except Exception:
+        pass
+
+    return None
+
+
+def dashboard_post(endpoint, payload):
+    try:
+        response = requests.post(
+            f"{DASHBOARD_URL}{endpoint}",
+            json=payload,
+            timeout=5
+        )
+        if response.status_code in (200, 201):
+            return response.json()
+    except Exception:
+        pass
+
+    return None
+
+
 def calculate_total_members():
     return sum(guild.member_count or 0 for guild in bot.guilds)
+
+
+def calculate_total_commands():
+    data = db.load()
+    total = 0
+
+    for server in data.get("servers", {}).values():
+        total += int(server.get("stats", {}).get("commands", 0) or 0)
+
+    return total
 
 
 def calculate_security_score():
@@ -72,25 +111,122 @@ def calculate_security_score():
     return round(total_score / len(bot.guilds))
 
 
+def sync_guild_to_database(guild):
+    server = db.get_server(guild.id)
+
+    server["server_name"] = guild.name
+    server["server_id"] = str(guild.id)
+    server["owner_id"] = str(guild.owner_id)
+    server["member_count"] = guild.member_count or 0
+    server["icon_url"] = guild.icon.url if guild.icon else None
+    server["bot_joined"] = True
+
+    db.update_server(guild.id, server)
+
+
 def sync_dashboard_state():
+    payload = {
+        "status": "Online",
+        "latency": f"{round(bot.latency * 1000)}ms",
+        "servers": len(bot.guilds),
+        "users": calculate_total_members(),
+        "commands": calculate_total_commands(),
+        "security_score": calculate_security_score()
+    }
+
+    dashboard_post("/api/bot-state/update", payload)
+
+
+async def execute_owner_action(action_item):
+    action_id = action_item.get("id")
+    action = action_item.get("action")
+    payload = action_item.get("payload", {})
+
+    result = "completed"
+
     try:
-        payload = {
-            "status": "Online",
-            "latency": f"{round(bot.latency * 1000)}ms",
-            "servers": len(bot.guilds),
-            "users": calculate_total_members(),
-            "commands": 0,
-            "security_score": calculate_security_score()
-        }
+        if action == "leave_server":
+            server_id = int(payload.get("server_id"))
+            guild = bot.get_guild(server_id)
 
-        requests.post(
-            f"{DASHBOARD_URL}/api/bot-state/update",
-            json=payload,
-            timeout=5
-        )
+            if not guild:
+                result = "Server not found or bot is not in that server."
+            else:
+                name = guild.name
+                await guild.leave()
+                result = f"ZELROVA left server: {name}"
 
-    except Exception:
-        pass
+        elif action == "Global Broadcast":
+            message = payload.get("message") or "ZELROVA Broadcast"
+            sent = 0
+
+            for guild in bot.guilds:
+                channel = guild.system_channel
+                if channel:
+                    try:
+                        await channel.send(f"📢 **ZELROVA Broadcast**\n\n{message}")
+                        sent += 1
+                    except Exception:
+                        pass
+
+            result = f"Broadcast sent to {sent} servers."
+
+        elif action == "Bot Status Control":
+            await bot.change_presence(
+                status=discord.Status.online,
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching,
+                    name=Config.MISSION
+                )
+            )
+            result = "Bot status refreshed."
+
+        elif action == "Maintenance Mode":
+            data = db.load()
+            current = data["bot"].get("maintenance", False)
+            data["bot"]["maintenance"] = not current
+            db.save(data)
+            result = f"Maintenance mode: {not current}"
+
+        elif action == "Developer Mode":
+            data = db.load()
+            current = data["bot"].get("developer_mode", False)
+            data["bot"]["developer_mode"] = not current
+            db.save(data)
+            result = f"Developer mode: {not current}"
+
+        elif action == "sync_modules":
+            result = "Module sync received by bot."
+
+        elif action == "sync_automod":
+            result = "AutoMod sync received by bot."
+
+        else:
+            result = f"Unknown owner action: {action}"
+
+    except Exception as error:
+        result = f"Action failed: {error}"
+
+    dashboard_post("/api/owner/action-complete", {
+        "action_id": action_id,
+        "result": result
+    })
+
+
+@tasks.loop(seconds=15)
+async def owner_action_loop():
+    actions = dashboard_get("/api/owner/actions")
+
+    if not actions:
+        return
+
+    pending = actions.get("pending", [])
+
+    if not pending:
+        return
+
+    for action_item in pending[:5]:
+        await execute_owner_action(action_item)
 
 
 @tasks.loop(minutes=2)
@@ -109,7 +245,7 @@ async def on_ready():
     await bot.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name="One Bot. Everything You Need."
+            name=Config.MISSION
         ),
         status=discord.Status.online
     )
@@ -121,14 +257,7 @@ async def on_ready():
     )
 
     for guild in bot.guilds:
-        server = db.get_server(guild.id)
-        server["server_name"] = guild.name
-        server["server_id"] = str(guild.id)
-        server["owner_id"] = str(guild.owner_id)
-        server["member_count"] = guild.member_count or 0
-        server["icon_url"] = guild.icon.url if guild.icon else None
-        db.update_server(guild.id, server)
-
+        sync_guild_to_database(guild)
         print(f"Server detected: {guild.name} ({guild.id})")
 
     sync_dashboard_state()
@@ -136,17 +265,13 @@ async def on_ready():
     if not dashboard_sync_loop.is_running():
         dashboard_sync_loop.start()
 
+    if not owner_action_loop.is_running():
+        owner_action_loop.start()
+
 
 @bot.event
 async def on_guild_join(guild):
-    server = db.get_server(guild.id)
-    server["server_name"] = guild.name
-    server["server_id"] = str(guild.id)
-    server["owner_id"] = str(guild.owner_id)
-    server["member_count"] = guild.member_count or 0
-    server["icon_url"] = guild.icon.url if guild.icon else None
-    server["bot_joined"] = True
-    db.update_server(guild.id, server)
+    sync_guild_to_database(guild)
 
     db.add_log(guild.id, "system", f"ZELROVA joined server: {guild.name}")
 
@@ -211,7 +336,7 @@ async def ping(ctx):
 async def zelrova(ctx):
     embed = discord.Embed(
         title="ZELROVA Bot",
-        description="One Bot. Everything You Need.",
+        description=Config.MISSION,
         color=discord.Color.red()
     )
 
@@ -235,14 +360,23 @@ async def topservers(ctx):
     ranking = []
 
     for guild_id, info in servers.items():
-        name = info.get("server_name", "Unknown Server")
-        members = info.get("member_count", 0)
-        stats = info.get("stats", {})
-        commands = stats.get("commands", 0)
-        tickets = stats.get("tickets", 0)
-        warnings = stats.get("warnings", 0)
+        if info.get("bot_joined") is False:
+            continue
 
-        trust_score = min(100, int((members / 100) + (commands / 50) + (tickets * 2) - warnings))
+        name = info.get("server_name", "Unknown Server")
+        members = int(info.get("member_count", 0) or 0)
+        stats = info.get("stats", {})
+        commands = int(stats.get("commands", 0) or 0)
+        tickets = int(stats.get("tickets", 0) or 0)
+        warnings = int(stats.get("warnings", 0) or 0)
+
+        trust_score = max(
+            0,
+            min(
+                100,
+                int(50 + (members / 100) + (commands / 50) + (tickets * 2) - warnings)
+            )
+        )
 
         ranking.append({
             "name": name,
@@ -274,11 +408,12 @@ async def topservers(ctx):
 
     await ctx.reply(embed=embed)
 
+
 @bot.command(name="command", aliases=["commands", "help"])
 async def command_list(ctx):
     embed = discord.Embed(
         title="📜 ZELROVA Bot Commands",
-        description="One Bot. Everything You Need.",
+        description=Config.MISSION,
         color=discord.Color.red()
     )
 
@@ -326,12 +461,14 @@ async def command_list(ctx):
 
     embed.add_field(
         name="👑 Owner Only",
-        value="`!owner`\n`!setstatus`\n`!broadcast`\n`!servers`\n`!reloadcog`\n`!syncstate`\n`!maintenance`\n`!devmode`\n`!premiumserver`\n`!databaseinfo`",
+        value="`!owner`\n`!setstatus`\n`!broadcast`\n`!servers`\n`!reloadcog`\n`!syncstate`\n`!maintenance`\n`!devmode`\n`!premiumserver`\n`!databaseinfo`\n`!leaveserver server_id`",
         inline=False
     )
 
     embed.set_footer(text="ZELROVA Bot • One Bot. Everything You Need.")
+
     await ctx.reply(embed=embed)
+
 
 async def load_cogs():
     for cog in COGS:

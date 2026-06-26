@@ -1,13 +1,17 @@
 {
     "enabled": true,
-    "xp": true,
-    "leaderboard": true,
-    "rank_cards": true,
+    "xp_min": 10,
+    "xp_max": 25,
+    "daily_min": 100,
+    "daily_max": 250,
     "coins": true,
     "economy": true,
-    "achievements": true,
-    "shop": true,
     "inventory": true,
+    "achievements": true,
+    "leaderboard": true,
+    "xp": true,
+    "rank_cards": true,
+    "shop": true,
     "daily_rewards": true,
     "1507291994039255110": {
         "1014889746750767204": {
