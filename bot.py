@@ -274,6 +274,64 @@ async def topservers(ctx):
 
     await ctx.reply(embed=embed)
 
+@bot.command(name="command", aliases=["commands", "help"])
+async def command_list(ctx):
+    embed = discord.Embed(
+        title="📜 ZELROVA Bot Commands",
+        description="One Bot. Everything You Need.",
+        color=discord.Color.red()
+    )
+
+    embed.add_field(
+        name="⚡ Basic",
+        value="`!ping`\n`!zelrova`\n`!command`\n`!topservers`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🛡 Moderation",
+        value="`!warn @user reason`\n`!warnings @user`\n`!clearwarnings @user`\n`!kick @user reason`\n`!ban @user reason`\n`!unban user_id`\n`!timeout @user minutes reason`\n`!untimeout @user`\n`!clear amount`\n`!lock`\n`!unlock`\n`!slowmode seconds`\n`!nickname @user name`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🔐 Security / AutoMod",
+        value="`!security`\n`!joinlock`\n`!joinunlock`\n`!lockdown`\n`!unlockdown`\n`!verification`\n`!automod`\n`!addbadword word`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🎫 Tickets",
+        value="`!ticket reason`\n`!claim`\n`!close`\n`!add @user`\n`!remove @user`\n`!rename name`\n`!transcript`\n`!tickets`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="📊 Levels / Economy",
+        value="`!rank`\n`!leaderboard`\n`!balance`\n`!daily`\n`!shop`\n`!inventory`\n`!achievements`\n`!levels`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🧠 AI",
+        value="`!ai question`\n`!translate language text`\n`!summarize text`\n`!codehelp question`\n`!animehelp anime`\n`!storyhelp idea`\n`!faq`\n`!aihelp`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="👋 Onboarding / Music / Logs",
+        value="`!onboarding`\n`!onboardinginfo`\n`!music`\n`!joinvc`\n`!leavevc`\n`!logs`\n`!logstats`\n`!exportlogs`",
+        inline=False
+    )
+
+    embed.add_field(
+        name="👑 Owner Only",
+        value="`!owner`\n`!setstatus`\n`!broadcast`\n`!servers`\n`!reloadcog`\n`!syncstate`\n`!maintenance`\n`!devmode`\n`!premiumserver`\n`!databaseinfo`",
+        inline=False
+    )
+
+    embed.set_footer(text="ZELROVA Bot • One Bot. Everything You Need.")
+    await ctx.reply(embed=embed)
 
 async def load_cogs():
     for cog in COGS:

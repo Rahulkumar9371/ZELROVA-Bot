@@ -5,7 +5,7 @@
         "status": "online",
         "maintenance": false,
         "developer_mode": false,
-        "last_ready": "2026-06-26 12:53:14",
+        "last_ready": "2026-06-26 14:05:59",
         "servers": 2,
         "users": 18
     },
@@ -142,9 +142,9 @@
                 "bans": 0,
                 "kicks": 0,
                 "tickets": 0,
-                "messages": 5,
+                "messages": 20,
                 "joins": 0,
-                "commands": 5
+                "commands": 16
             },
             "server_name": "𝐑𝐄𝐕𝐎’𝐒 𝐄𝐑𝐀 | 𝐓𝐇𝐄 𝐋𝐄𝐆𝐄𝐍𝐃 𝐄𝐌𝐏𝐈𝐑𝐄",
             "server_id": "1474253939795824721",
@@ -155,9 +155,9 @@
     },
     "users": {
         "1474253939795824721-1014889746750767204": {
-            "xp": 95,
-            "level": 1,
-            "coins": 15,
+            "xp": 126,
+            "level": 2,
+            "coins": 37,
             "inventory": [],
             "achievements": [],
             "last_daily": null
@@ -182,6 +182,12 @@
                 {
                     "message": "AI Chat | anme_spy asked: hello",
                     "time": "2026-06-26 12:54:59"
+                }
+            ],
+            "levels": [
+                {
+                    "message": "Level Up | anme_spy reached level 2",
+                    "time": "2026-06-26 13:04:59"
                 }
             ]
         }

@@ -1515,3 +1515,38 @@ textarea:focus{
     padding:22px;
   }
 }
+/* ZELROVA TRUE SIDEBAR SCROLL FIX */
+.sidebar{
+  height:100dvh !important;
+  max-height:100dvh !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+
+.sidebar .brand{
+  flex:0 0 auto !important;
+}
+
+.sidebar .side-nav{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  padding-right:6px !important;
+  padding-bottom:25px !important;
+}
+
+.sidebar .premium-card{
+  flex:0 0 auto !important;
+  margin-top:16px !important;
+}
+
+.sidebar .side-nav::-webkit-scrollbar{
+  width:7px;
+}
+
+.sidebar .side-nav::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#ff2d55,#8a3ffc,#2d7dff);
+  border-radius:20px;
+}

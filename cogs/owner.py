@@ -225,6 +225,48 @@ class Owner(commands.Cog):
 
         await ctx.reply(embed=embed)
 
+    @commands.command()
+    async def leaveserver(self, ctx, server_id: int):
+        if not self.is_owner(ctx):
+            await self.deny(ctx)
+            return
+
+        guild = self.bot.get_guild(server_id)
+
+        if not guild:
+            await ctx.reply("❌ Server not found. Bot may not be in that server.")
+            return
+
+        server_name = guild.name
+
+        await ctx.reply(
+            embed=self.embed(
+                "⚠️ Confirm Server Leave",
+                (
+                    f"ZELROVA will leave this server:\n\n"
+                    f"**Server:** {server_name}\n"
+                    f"**ID:** `{server_id}`\n\n"
+                    f"Type `YES` within 20 seconds to confirm."
+                )
+            )
+        )
+
+        def check(message):
+            return (
+                message.author.id == ctx.author.id
+                and message.channel.id == ctx.channel.id
+                and message.content == "YES"
+            )
+
+        try:
+            await self.bot.wait_for("message", check=check, timeout=20)
+        except Exception:
+            await ctx.reply("❌ Server leave cancelled.")
+            return
+
+        await guild.leave()
+
+        await ctx.reply(f"✅ ZELROVA left server: **{server_name}**")
 
 async def setup(bot):
     await bot.add_cog(Owner(bot))
