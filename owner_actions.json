@@ -1,4 +1,23 @@
 {
-    "pending": [],
+    "pending": [
+        {
+            "id": "action_20260626145559023248",
+            "action": "leave_server",
+            "payload": {
+                "server_id": "1474253939795824721"
+            },
+            "status": "pending",
+            "created_at": "2026-06-26 14:55:59"
+        },
+        {
+            "id": "action_20260626145604323871",
+            "action": "leave_server",
+            "payload": {
+                "server_id": "1474253939795824721"
+            },
+            "status": "pending",
+            "created_at": "2026-06-26 14:56:04"
+        }
+    ],
     "completed": []
 }

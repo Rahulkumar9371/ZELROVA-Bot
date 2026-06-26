@@ -5,6 +5,14 @@
     "ticket_logs": [],
     "system_logs": [
         {
+            "message": "Owner action queued: leave_server",
+            "time": "2026-06-26 14:56:04"
+        },
+        {
+            "message": "Owner action queued: leave_server",
+            "time": "2026-06-26 14:55:59"
+        },
+        {
             "message": "Dashboard login: anme_spy (1014889746750767204)",
             "time": "2026-06-26 14:41:11"
         },
