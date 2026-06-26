@@ -256,6 +256,17 @@ async def on_ready():
         users=calculate_total_members()
     )
 
+    data = db.load()
+    live_guild_ids = [str(guild.id) for guild in bot.guilds]
+
+    for guild_id in data.get("servers", {}):
+        if guild_id not in live_guild_ids:
+            data["servers"][guild_id]["bot_joined"] = False
+            data["servers"][guild_id]["online"] = False
+            data["servers"][guild_id]["left_at"] = "Bot left or not connected"
+
+    db.save(data)
+
     for guild in bot.guilds:
         sync_guild_to_database(guild)
         print(f"Server detected: {guild.name} ({guild.id})")

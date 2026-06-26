@@ -120,39 +120,30 @@
     <span>Live Ranking</span>
   </div>
 
+  <section class="glass-card">
+  <div class="section-title">
+    <h2>🏆 Top Trusted Servers</h2>
+    <span>Live Ranking</span>
+  </div>
+
   <div class="module-grid">
+    {% for server in data.server_list[:10] %}
     <div class="module-card">
-      <h3>🥇 #1 ZELROVA Community</h3>
+      <h3>#{{ loop.index }} {{ server.name }}</h3>
       <p>
-        👑 Owner: Rahul<br>
-        👥 Members: 24.8K<br>
-        ⚡ Commands: 91K<br>
-        ⭐ Trust Score: 99%<br>
-        🟢 Status: Active
+        👑 Owner: {{ server.owner }}<br>
+        👥 Members: {{ server.members }}<br>
+        ⚡ Commands: {{ server.commands }}<br>
+        ⭐ Trust Score: {{ server.trust_score }}%<br>
+        🟢 Status: Live
       </p>
     </div>
-
+    {% else %}
     <div class="module-card">
-      <h3>🥈 #2 Anime Network</h3>
-      <p>
-        👑 Owner: Server Owner<br>
-        👥 Members: Live Database<br>
-        ⚡ Commands: Live Data<br>
-        ⭐ Trust Score: Calculated<br>
-        🟢 Status: Active
-      </p>
+      <h3>No live servers</h3>
+      <p>Bot connected servers will appear here.</p>
     </div>
-
-    <div class="module-card">
-      <h3>🥉 #3 Gaming Hub</h3>
-      <p>
-        👑 Owner: Server Owner<br>
-        👥 Members: Live Database<br>
-        ⚡ Commands: Live Data<br>
-        ⭐ Trust Score: Calculated<br>
-        🟢 Status: Active
-      </p>
-    </div>
+    {% endfor %}
   </div>
 </section>
 <section class="glass-card">

@@ -5,9 +5,9 @@
         "status": "online",
         "maintenance": false,
         "developer_mode": false,
-        "last_ready": "2026-06-26 15:07:52",
-        "servers": 2,
-        "users": 18
+        "last_ready": "2026-06-26 19:13:23",
+        "servers": 1,
+        "users": 14
     },
     "dashboard": {
         "theme": "red",
@@ -152,7 +152,8 @@
             "owner_id": "952888657751203851",
             "member_count": 4,
             "icon_url": "https://cdn.discordapp.com/icons/1474253939795824721/c5b3c9b5b0eebd83437fb2a7430e43dd.png?size=1024",
-            "bot_joined": true
+            "bot_joined": true,
+            "left_at": "Left server"
         }
     },
     "users": {
@@ -190,6 +191,18 @@
                 {
                     "message": "Level Up | anme_spy reached level 2",
                     "time": "2026-06-26 13:04:59"
+                }
+            ],
+            "security": [
+                {
+                    "message": "⚠️ Role Deleted | Role deleted: `ZELROVA Bot`",
+                    "time": "2026-06-26 19:10:17"
+                }
+            ],
+            "system": [
+                {
+                    "message": "ZELROVA joined server: 𝐑𝐄𝐕𝐎’𝐒 𝐄𝐑𝐀 | 𝐓𝐇𝐄 𝐋𝐄𝐆𝐄𝐍𝐃 𝐄𝐌𝐏𝐈𝐑𝐄",
+                    "time": "2026-06-26 19:19:41"
                 }
             ]
         }
