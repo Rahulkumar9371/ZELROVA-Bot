@@ -2,11 +2,16 @@
     "bot": {
         "name": "ZELROVA",
         "version": "1.0 Foundation",
+        "status": "online",
         "maintenance": false,
-        "status": "online"
+        "developer_mode": false,
+        "last_ready": "2026-06-26 12:53:14",
+        "servers": 2,
+        "users": 18
     },
     "dashboard": {
-        "theme": "red"
+        "theme": "red",
+        "last_sync": null
     },
     "servers": {
         "1507291994039255110": {
@@ -24,18 +29,163 @@
                 "logs": true,
                 "analytics": true,
                 "ai": true,
-                "music": false
+                "music": false,
+                "backup": true,
+                "owner_panel": true
+            },
+            "channels": {
+                "welcome": null,
+                "leave": null,
+                "logs": null,
+                "tickets": null,
+                "announcements": null
+            },
+            "roles": {
+                "autorole": null,
+                "muted": null,
+                "staff": null
+            },
+            "automod": {
+                "bad_words": true,
+                "spam_protection": true,
+                "invite_links": true,
+                "scam_links": true,
+                "mention_spam": true,
+                "caps_spam": true,
+                "duplicate_messages": true
+            },
+            "tickets": {
+                "enabled": true,
+                "category_name": "Tickets",
+                "transcripts": true,
+                "rating": true
+            },
+            "levels": {
+                "enabled": true,
+                "xp_min": 10,
+                "xp_max": 25,
+                "cooldown": 60,
+                "daily_min": 100,
+                "daily_max": 250
             },
             "stats": {
                 "warnings": 0,
                 "bans": 0,
+                "kicks": 0,
                 "tickets": 0,
                 "messages": 0,
-                "joins": 0
-            }
+                "joins": 0,
+                "commands": 0
+            },
+            "server_name": "ZELROVA",
+            "server_id": "1507291994039255110",
+            "owner_id": "1014889746750767204",
+            "member_count": 14,
+            "icon_url": "https://cdn.discordapp.com/icons/1507291994039255110/0152431e7c3e34da234fed3be2e6b1b3.png?size=1024"
+        },
+        "1474253939795824721": {
+            "prefix": "!",
+            "language": "en",
+            "theme": "red",
+            "modules": {
+                "moderation": true,
+                "security": true,
+                "automod": true,
+                "welcome": true,
+                "reaction_roles": true,
+                "tickets": true,
+                "levels": true,
+                "logs": true,
+                "analytics": true,
+                "ai": true,
+                "music": false,
+                "backup": true,
+                "owner_panel": true
+            },
+            "channels": {
+                "welcome": null,
+                "leave": null,
+                "logs": null,
+                "tickets": null,
+                "announcements": null
+            },
+            "roles": {
+                "autorole": null,
+                "muted": null,
+                "staff": null
+            },
+            "automod": {
+                "bad_words": true,
+                "spam_protection": true,
+                "invite_links": true,
+                "scam_links": true,
+                "mention_spam": true,
+                "caps_spam": true,
+                "duplicate_messages": true
+            },
+            "tickets": {
+                "enabled": true,
+                "category_name": "Tickets",
+                "transcripts": true,
+                "rating": true
+            },
+            "levels": {
+                "enabled": true,
+                "xp_min": 10,
+                "xp_max": 25,
+                "cooldown": 60,
+                "daily_min": 100,
+                "daily_max": 250
+            },
+            "stats": {
+                "warnings": 0,
+                "bans": 0,
+                "kicks": 0,
+                "tickets": 0,
+                "messages": 5,
+                "joins": 0,
+                "commands": 5
+            },
+            "server_name": "𝐑𝐄𝐕𝐎’𝐒 𝐄𝐑𝐀 | 𝐓𝐇𝐄 𝐋𝐄𝐆𝐄𝐍𝐃 𝐄𝐌𝐏𝐈𝐑𝐄",
+            "server_id": "1474253939795824721",
+            "owner_id": "952888657751203851",
+            "member_count": 4,
+            "icon_url": "https://cdn.discordapp.com/icons/1474253939795824721/c5b3c9b5b0eebd83437fb2a7430e43dd.png?size=1024"
         }
     },
-    "users": {},
+    "users": {
+        "1474253939795824721-1014889746750767204": {
+            "xp": 95,
+            "level": 1,
+            "coins": 15,
+            "inventory": [],
+            "achievements": [],
+            "last_daily": null
+        },
+        "1474253939795824721-952888657751203851": {
+            "xp": 38,
+            "level": 1,
+            "coins": 8,
+            "inventory": [],
+            "achievements": []
+        }
+    },
+    "tickets": {},
+    "warnings": {},
+    "logs": {
+        "1474253939795824721": {
+            "ai": [
+                {
+                    "message": "AI Chat | anme_spy asked: kaisai ho",
+                    "time": "2026-06-26 12:55:28"
+                },
+                {
+                    "message": "AI Chat | anme_spy asked: hello",
+                    "time": "2026-06-26 12:54:59"
+                }
+            ]
+        }
+    },
     "premium": {
         "servers": [],
         "users": []

@@ -1,170 +1,313 @@
+import asyncio
+import datetime
 import discord
 from discord.ext import commands
 
 from database import db
+from config import Config
 
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def mod_embed(self, title, description):
+    def embed(self, title, description, color=discord.Color.red()):
         return discord.Embed(
             title=title,
             description=description,
-            color=discord.Color.red()
+            color=color,
+            timestamp=datetime.datetime.utcnow()
         )
+
+    async def mod_log(self, guild, title, description):
+        try:
+            db.add_log(guild.id, "moderation", f"{title} | {description}")
+        except Exception:
+            pass
+
+        channel = discord.utils.get(guild.text_channels, name="zelrova-logs")
+
+        if channel:
+            await channel.send(embed=self.embed(title, description))
+
+    def can_moderate(self, ctx, member):
+        if member == ctx.author:
+            return False, "❌ Tum khud par action nahi kar sakte."
+
+        if member == ctx.guild.owner:
+            return False, "❌ Server owner par action nahi kar sakte."
+
+        if member.top_role >= ctx.author.top_role and ctx.author != ctx.guild.owner:
+            return False, "❌ Is member ka role tumse same ya higher hai."
+
+        if ctx.guild.me and member.top_role >= ctx.guild.me.top_role:
+            return False, "❌ Mera role is member se neeche hai."
+
+        return True, None
 
     @commands.command()
-    @commands.has_permissions(manage_messages=True)
+    @commands.has_permissions(kick_members=True)
     async def warn(self, ctx, member: discord.Member, *, reason="No reason provided"):
-        data = db.load()
-        guild_id = str(ctx.guild.id)
-        user_id = str(member.id)
+        ok, msg = self.can_moderate(ctx, member)
+        if not ok:
+            await ctx.reply(msg)
+            return
 
-        if guild_id not in data:
-            data[guild_id] = {}
-
-        if "warnings" not in data:
-            data["warnings"] = {}
-
-        if guild_id not in data["warnings"]:
-            data["warnings"][guild_id] = {}
-
-        if user_id not in data["warnings"][guild_id]:
-            data["warnings"][guild_id][user_id] = []
-
-        data["warnings"][guild_id][user_id].append({
-            "reason": reason,
-            "moderator": str(ctx.author),
-            "moderator_id": ctx.author.id
-        })
-
-        db.save(data)
-
-        embed = self.mod_embed(
-            "⚠️ User Warned",
-            f"{member.mention} has been warned.\n\n**Reason:** {reason}"
+        warning = db.add_warning(
+            ctx.guild.id,
+            member.id,
+            reason,
+            ctx.author.id
         )
+
+        warnings = db.get_warnings(ctx.guild.id, member.id)
+
+        embed = self.embed(
+            "⚠️ Warning Added",
+            (
+                f"**User:** {member.mention}\n"
+                f"**Moderator:** {ctx.author.mention}\n"
+                f"**Reason:** {reason}\n"
+                f"**Total Warnings:** {len(warnings)}"
+            )
+        )
+
         await ctx.reply(embed=embed)
 
+        await self.mod_log(
+            ctx.guild,
+            "Warn Log",
+            f"{member} warned by {ctx.author}. Reason: {reason}"
+        )
+
+        if len(warnings) >= Config.MAX_WARNINGS:
+            try:
+                duration = discord.utils.utcnow() + datetime.timedelta(minutes=Config.DEFAULT_TIMEOUT_MINUTES)
+                await member.timeout(duration, reason="Max warnings reached")
+
+                await ctx.send(
+                    embed=self.embed(
+                        "⏳ Auto Timeout",
+                        f"{member.mention} reached max warnings and was timed out for {Config.DEFAULT_TIMEOUT_MINUTES} minutes."
+                    )
+                )
+            except Exception:
+                pass
+
     @commands.command()
-    @commands.has_permissions(manage_messages=True)
+    @commands.has_permissions(kick_members=True)
     async def warnings(self, ctx, member: discord.Member):
-        data = db.load()
-        guild_id = str(ctx.guild.id)
-        user_id = str(member.id)
+        warnings = db.get_warnings(ctx.guild.id, member.id)
 
-        warns = data.get("warnings", {}).get(guild_id, {}).get(user_id, [])
-
-        if not warns:
-            await ctx.reply(f"✅ {member.mention} has no warnings.")
+        if not warnings:
+            await ctx.reply(f"✅ {member.mention} ke paas koi warning nahi hai.")
             return
 
         description = ""
 
-        for index, warn in enumerate(warns, start=1):
-            description += f"**{index}.** {warn['reason']} — `{warn['moderator']}`\n"
+        for index, warning in enumerate(warnings, start=1):
+            description += (
+                f"**#{index}** {warning.get('reason', 'No reason')}\n"
+                f"Moderator ID: `{warning.get('moderator_id')}`\n"
+                f"Time: `{warning.get('time')}`\n\n"
+            )
 
-        embed = self.mod_embed(
-            f"Warnings for {member}",
-            description
+        await ctx.reply(
+            embed=self.embed(
+                f"⚠️ Warnings for {member}",
+                description[:4000]
+            )
         )
 
-        await ctx.reply(embed=embed)
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def clearwarnings(self, ctx, member: discord.Member):
+        db.clear_warnings(ctx.guild.id, member.id)
+
+        await ctx.reply(
+            embed=self.embed(
+                "✅ Warnings Cleared",
+                f"{member.mention} ki warnings clear kar di gayi."
+            )
+        )
+
+        await self.mod_log(
+            ctx.guild,
+            "Clear Warnings",
+            f"{member} warnings cleared by {ctx.author}"
+        )
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason="No reason provided"):
+        ok, msg = self.can_moderate(ctx, member)
+        if not ok:
+            await ctx.reply(msg)
+            return
+
         await member.kick(reason=reason)
+        db.increment_stat(ctx.guild.id, "kicks")
 
-        db.increment_stat(ctx.guild.id, "warnings")
-
-        embed = self.mod_embed(
-            "👢 User Kicked",
-            f"{member.mention} was kicked.\n\n**Reason:** {reason}"
+        await ctx.reply(
+            embed=self.embed(
+                "👢 Member Kicked",
+                f"**User:** {member}\n**Moderator:** {ctx.author}\n**Reason:** {reason}"
+            )
         )
 
-        await ctx.reply(embed=embed)
+        await self.mod_log(
+            ctx.guild,
+            "Kick Log",
+            f"{member} kicked by {ctx.author}. Reason: {reason}"
+        )
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason="No reason provided"):
-        await member.ban(reason=reason)
+        ok, msg = self.can_moderate(ctx, member)
+        if not ok:
+            await ctx.reply(msg)
+            return
 
+        await member.ban(reason=reason)
         db.increment_stat(ctx.guild.id, "bans")
 
-        embed = self.mod_embed(
-            "🔨 User Banned",
-            f"{member.mention} was banned.\n\n**Reason:** {reason}"
+        await ctx.reply(
+            embed=self.embed(
+                "🔨 Member Banned",
+                f"**User:** {member}\n**Moderator:** {ctx.author}\n**Reason:** {reason}"
+            )
         )
 
-        await ctx.reply(embed=embed)
+        await self.mod_log(
+            ctx.guild,
+            "Ban Log",
+            f"{member} banned by {ctx.author}. Reason: {reason}"
+        )
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, user_id: int):
+    async def unban(self, ctx, user_id: int, *, reason="No reason provided"):
         user = await self.bot.fetch_user(user_id)
-        await ctx.guild.unban(user)
+        await ctx.guild.unban(user, reason=reason)
 
-        embed = self.mod_embed(
-            "✅ User Unbanned",
-            f"`{user}` has been unbanned."
+        await ctx.reply(
+            embed=self.embed(
+                "✅ Member Unbanned",
+                f"**User:** {user}\n**Moderator:** {ctx.author}\n**Reason:** {reason}"
+            )
         )
 
-        await ctx.reply(embed=embed)
-
-    @commands.command()
-    @commands.has_permissions(moderate_members=True)
-    async def timeout(self, ctx, member: discord.Member, minutes: int, *, reason="No reason provided"):
-        duration = discord.utils.utcnow() + discord.timedelta(minutes=minutes)
-        await member.timeout(duration, reason=reason)
-
-        embed = self.mod_embed(
-            "⏳ User Timed Out",
-            f"{member.mention} timed out for **{minutes} minutes**.\n\n**Reason:** {reason}"
+        await self.mod_log(
+            ctx.guild,
+            "Unban Log",
+            f"{user} unbanned by {ctx.author}. Reason: {reason}"
         )
 
-        await ctx.reply(embed=embed)
-
-    @commands.command()
-    @commands.has_permissions(moderate_members=True)
-    async def untimeout(self, ctx, member: discord.Member):
-        await member.timeout(None)
-
-        embed = self.mod_embed(
-            "✅ Timeout Removed",
-            f"{member.mention} timeout removed."
-        )
-
-        await ctx.reply(embed=embed)
-
-    @commands.command()
+    @commands.command(aliases=["purge"])
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, amount: int = 10):
-        if amount > 100:
-            amount = 100
+    async def clear(self, ctx, amount: int = 10):
+        if amount < 1:
+            await ctx.reply("❌ Amount 1 se kam nahi ho sakta.")
+            return
+
+        if amount > Config.MAX_PURGE:
+            amount = Config.MAX_PURGE
 
         deleted = await ctx.channel.purge(limit=amount + 1)
 
-        embed = self.mod_embed(
-            "🧹 Messages Purged",
-            f"Deleted **{len(deleted) - 1}** messages."
+        msg = await ctx.send(
+            embed=self.embed(
+                "🧹 Messages Cleared",
+                f"Deleted **{len(deleted) - 1}** messages."
+            )
         )
 
-        await ctx.send(embed=embed, delete_after=5)
+        await asyncio.sleep(5)
+        try:
+            await msg.delete()
+        except Exception:
+            pass
+
+        await self.mod_log(
+            ctx.guild,
+            "Clear Log",
+            f"{len(deleted) - 1} messages cleared by {ctx.author} in {ctx.channel}"
+        )
+
+    @commands.command()
+    @commands.has_permissions(moderate_members=True)
+    async def timeout(self, ctx, member: discord.Member, minutes: int = 10, *, reason="No reason provided"):
+        ok, msg = self.can_moderate(ctx, member)
+        if not ok:
+            await ctx.reply(msg)
+            return
+
+        if minutes < 1:
+            await ctx.reply("❌ Timeout minimum 1 minute ka hona chahiye.")
+            return
+
+        if minutes > 40320:
+            await ctx.reply("❌ Timeout max 28 days ka ho sakta hai.")
+            return
+
+        duration = discord.utils.utcnow() + datetime.timedelta(minutes=minutes)
+        await member.timeout(duration, reason=reason)
+
+        await ctx.reply(
+            embed=self.embed(
+                "⏳ Member Timed Out",
+                f"**User:** {member.mention}\n**Duration:** {minutes} minutes\n**Reason:** {reason}"
+            )
+        )
+
+        await self.mod_log(
+            ctx.guild,
+            "Timeout Log",
+            f"{member} timed out by {ctx.author} for {minutes} minutes. Reason: {reason}"
+        )
+
+    @commands.command()
+    @commands.has_permissions(moderate_members=True)
+    async def untimeout(self, ctx, member: discord.Member, *, reason="No reason provided"):
+        await member.timeout(None, reason=reason)
+
+        await ctx.reply(
+            embed=self.embed(
+                "✅ Timeout Removed",
+                f"{member.mention} ka timeout remove kar diya gaya."
+            )
+        )
+
+        await self.mod_log(
+            ctx.guild,
+            "Untimeout Log",
+            f"{member} timeout removed by {ctx.author}. Reason: {reason}"
+        )
 
     @commands.command()
     @commands.has_permissions(manage_channels=True)
     async def slowmode(self, ctx, seconds: int = 5):
+        if seconds < 0:
+            seconds = 0
+
+        if seconds > 21600:
+            seconds = 21600
+
         await ctx.channel.edit(slowmode_delay=seconds)
 
-        embed = self.mod_embed(
-            "🐢 Slowmode Updated",
-            f"Slowmode set to **{seconds} seconds**."
+        await ctx.reply(
+            embed=self.embed(
+                "🐢 Slowmode Updated",
+                f"Slowmode set to **{seconds} seconds**."
+            )
         )
 
-        await ctx.reply(embed=embed)
+        await self.mod_log(
+            ctx.guild,
+            "Slowmode Log",
+            f"Slowmode set to {seconds}s in {ctx.channel} by {ctx.author}"
+        )
 
     @commands.command()
     @commands.has_permissions(manage_channels=True)
@@ -174,12 +317,18 @@ class Moderation(commands.Cog):
 
         await ctx.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
 
-        embed = self.mod_embed(
-            "🔒 Channel Locked",
-            "Members can no longer send messages here."
+        await ctx.reply(
+            embed=self.embed(
+                "🔒 Channel Locked",
+                "Members can no longer send messages here."
+            )
         )
 
-        await ctx.reply(embed=embed)
+        await self.mod_log(
+            ctx.guild,
+            "Lock Log",
+            f"{ctx.channel} locked by {ctx.author}"
+        )
 
     @commands.command()
     @commands.has_permissions(manage_channels=True)
@@ -189,21 +338,61 @@ class Moderation(commands.Cog):
 
         await ctx.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
 
-        embed = self.mod_embed(
-            "🔓 Channel Unlocked",
-            "Members can send messages again."
+        await ctx.reply(
+            embed=self.embed(
+                "🔓 Channel Unlocked",
+                "Members can send messages again."
+            )
         )
 
-        await ctx.reply(embed=embed)
+        await self.mod_log(
+            ctx.guild,
+            "Unlock Log",
+            f"{ctx.channel} unlocked by {ctx.author}"
+        )
 
     @commands.command()
     @commands.has_permissions(manage_nicknames=True)
     async def nickname(self, ctx, member: discord.Member, *, nickname=None):
+        ok, msg = self.can_moderate(ctx, member)
+        if not ok:
+            await ctx.reply(msg)
+            return
+
         await member.edit(nick=nickname)
 
-        embed = self.mod_embed(
-            "🏷️ Nickname Updated",
-            f"{member.mention}'s nickname has been updated."
+        await ctx.reply(
+            embed=self.embed(
+                "🏷 Nickname Updated",
+                f"{member.mention}'s nickname updated."
+            )
+        )
+
+        await self.mod_log(
+            ctx.guild,
+            "Nickname Log",
+            f"{member} nickname changed by {ctx.author}"
+        )
+
+    @commands.command()
+    async def moderation(self, ctx):
+        embed = self.embed(
+            "🛡 ZELROVA Moderation",
+            (
+                "`!warn @user reason`\n"
+                "`!warnings @user`\n"
+                "`!clearwarnings @user`\n"
+                "`!kick @user reason`\n"
+                "`!ban @user reason`\n"
+                "`!unban user_id reason`\n"
+                "`!timeout @user minutes reason`\n"
+                "`!untimeout @user`\n"
+                "`!clear amount` or `!purge amount`\n"
+                "`!slowmode seconds`\n"
+                "`!lock`\n"
+                "`!unlock`\n"
+                "`!nickname @user name`"
+            )
         )
 
         await ctx.reply(embed=embed)

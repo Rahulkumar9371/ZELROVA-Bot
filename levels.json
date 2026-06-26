@@ -1,4 +1,14 @@
 {
+    "enabled": true,
+    "xp": true,
+    "leaderboard": true,
+    "rank_cards": true,
+    "coins": true,
+    "economy": true,
+    "achievements": true,
+    "shop": true,
+    "inventory": true,
+    "daily_rewards": true,
     "1507291994039255110": {
         "1014889746750767204": {
             "xp": 21,

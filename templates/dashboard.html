@@ -6,6 +6,7 @@
   <title>ZELROVA Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
+
 <body class="zelrova-dashboard">
 
 <div class="dashboard-bg">
@@ -54,14 +55,15 @@
 
 <header class="topbar">
   <button class="menu-btn" id="menuBtn">☰</button>
+
   <div>
     <h1>Dashboard Overview</h1>
     <p>One Bot. Everything You Need.</p>
   </div>
 
   <div class="top-actions">
-    <a class="ghost-btn" href="https://discord.gg/YOUR_SERVER_INVITE" target="_blank">Join Server</a>
-    <a class="ghost-btn" href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot%20applications.commands" target="_blank">Add Bot</a>
+    <a class="ghost-btn" href="https://discord.gg/32urRvMMHf" target="_blank">Join Server</a>
+    <a class="ghost-btn" href="https://discord.com/oauth2/authorize?client_id=1518161863383187607&permissions=8&scope=bot%20applications.commands" target="_blank">Add Bot</a>
     <button class="main-btn" id="saveAllBtn">Save Changes</button>
   </div>
 </header>
@@ -76,7 +78,7 @@
   <div class="server-status">
     <span class="status-dot"></span>
     <div>
-      <h3>Bot Online</h3>
+      <h3>{{ data.server_config.bot_status }}</h3>
       <p>Render + Flask + JSON Active</p>
     </div>
   </div>
@@ -88,12 +90,13 @@
       <h2>🤖 Bot Details</h2>
       <span>Live Info</span>
     </div>
+
     <div class="status-list">
       <div><span>Bot Name</span><b>ZELROVA Bot</b></div>
       <div><span>Version</span><b>1.0 Foundation</b></div>
-      <div><span>Prefix</span><b>!</b></div>
-      <div><span>Status</span><b>Online</b></div>
-      <div><span>Database</span><b>JSON Active</b></div>
+      <div><span>Prefix</span><b>{{ data.server_config.prefix }}</b></div>
+      <div><span>Language</span><b>{{ data.server_config.language }}</b></div>
+      <div><span>Status</span><b>{{ data.server_config.bot_status }}</b></div>
     </div>
   </div>
 
@@ -102,21 +105,41 @@
       <h2>🌐 Server Details</h2>
       <span>ZELROVA Community</span>
     </div>
+
     <div class="status-list">
-      <div><span>Server</span><b>ZELROVA Community</b></div>
-      <div><span>Members</span><b>24.8K</b></div>
-      <div><span>Theme</span><b>Anime • Gaming • Coding</b></div>
-      <div><span>Support</span><b>Active</b></div>
-      <div><span>Protection</span><b>Enabled</b></div>
+      <div><span>Server</span><b>{{ data.server_config.server_name }}</b></div>
+      <div><span>Server ID</span><b>{{ data.server_config.server_id or "Not Connected" }}</b></div>
+      <div><span>Theme</span><b>{{ data.server_config.theme }}</b></div>
+      <div><span>Developer Mode</span><b>{{ data.server_config.developer_mode }}</b></div>
+      <div><span>Maintenance</span><b>{{ data.server_config.maintenance_mode }}</b></div>
     </div>
   </div>
 </section>
 
 <section class="stats-grid">
-  <div class="stat-card glass-card"><span>Total Servers</span><h2>{{ data.stats.servers }}</h2><p>Server detection active</p></div>
-  <div class="stat-card glass-card"><span>Active Users</span><h2>{{ data.stats.users }}</h2><p>Community network</p></div>
-  <div class="stat-card glass-card"><span>Commands Used</span><h2>{{ data.stats.commands }}</h2><p>Live command activity</p></div>
-  <div class="stat-card glass-card"><span>Security Score</span><h2>{{ data.stats.security_score }}%</h2><p>Protection enabled</p></div>
+  <div class="stat-card glass-card">
+    <span>Total Servers</span>
+    <h2>{{ data.stats.servers }}</h2>
+    <p>Server detection active</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Active Users</span>
+    <h2>{{ data.stats.users }}</h2>
+    <p>Community network</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Commands Used</span>
+    <h2>{{ data.stats.commands }}</h2>
+    <p>Live command activity</p>
+  </div>
+
+  <div class="stat-card glass-card">
+    <span>Security Score</span>
+    <h2>{{ data.stats.security_score }}%</h2>
+    <p>Protection enabled</p>
+  </div>
 </section>
 
 <section class="dashboard-grid">
@@ -125,6 +148,7 @@
       <h2>Quick Actions</h2>
       <span>Fast controls</span>
     </div>
+
     <div class="quick-actions">
       <button data-action="Enable AutoMod">Enable AutoMod</button>
       <button data-action="Emergency Security Mode">Emergency Security</button>
@@ -140,6 +164,7 @@
       <h2>Live Server Status</h2>
       <span class="online-pill">Online</span>
     </div>
+
     <div class="status-list">
       <div><span>Latency</span><b>{{ data.stats.latency }}</b></div>
       <div><span>Database</span><b>{{ data.stats.database }}</b></div>
@@ -162,12 +187,42 @@
         <h3>{{ key.replace("_", " ").title() }}</h3>
         <p>ZELROVA {{ key.replace("_", " ") }} control module.</p>
       </div>
+
       <label class="switch">
         <input type="checkbox" data-module="{{ key }}" {% if value %}checked{% endif %}>
         <span></span>
       </label>
     </div>
     {% endfor %}
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <div class="glass-card ai-panel">
+    <div class="section-title">
+      <h2>AI System</h2>
+      <span>Version 7.0</span>
+    </div>
+
+    <p>AI Chat, AI Moderator, AI Translate, AI Summary, AI FAQ, Coding Helper, Anime Helper and Story Helper.</p>
+
+    <textarea id="aiPersonality">Friendly, smart, premium ZELROVA assistant for Discord communities.</textarea>
+
+    <button class="main-btn" data-action="Update AI System">Update AI</button>
+  </div>
+
+  <div class="glass-card owner-panel">
+    <div class="section-title">
+      <h2>Owner Panel</h2>
+      <span>Private</span>
+    </div>
+
+    <div class="owner-tools">
+      <button data-action="Bot Status Control">Bot Status</button>
+      <button data-action="Remote Commands">Remote Commands</button>
+      <button data-action="Premium Manager">Premium Manager</button>
+      <button data-action="Global Ban">Global Ban</button>
+    </div>
   </div>
 </section>
 
@@ -180,10 +235,34 @@
   <div class="module-grid">
     <div class="module-card"><h3>!ping</h3><p>Check bot latency.</p></div>
     <div class="module-card"><h3>!zelrova</h3><p>Bot info and status.</p></div>
-    <div class="module-card"><h3>!warn</h3><p>Warn a user.</p></div>
+    <div class="module-card"><h3>!warn @user reason</h3><p>Warn a user.</p></div>
     <div class="module-card"><h3>!ticket</h3><p>Create support ticket.</p></div>
     <div class="module-card"><h3>!rank</h3><p>Check level rank.</p></div>
-    <div class="module-card"><h3>!ai</h3><p>Ask ZELROVA AI.</p></div>
+    <div class="module-card"><h3>!ai question</h3><p>Ask ZELROVA AI.</p></div>
+  </div>
+</section>
+
+<section class="glass-card">
+  <div class="section-title">
+    <h2>Roadmap Progress</h2>
+    <span>14 Phases</span>
+  </div>
+
+  <div class="roadmap">
+    <div class="phase done">Phase 1<br><b>Foundation</b></div>
+    <div class="phase active">Phase 2<br><b>Moderation</b></div>
+    <div class="phase">Phase 3<br><b>Security</b></div>
+    <div class="phase">Phase 4<br><b>Community</b></div>
+    <div class="phase">Phase 5<br><b>Tickets</b></div>
+    <div class="phase">Phase 6<br><b>Levels</b></div>
+    <div class="phase">Phase 7<br><b>AI</b></div>
+    <div class="phase">Phase 8<br><b>Entertainment</b></div>
+    <div class="phase">Phase 9<br><b>Dashboard PRO</b></div>
+    <div class="phase">Phase 10<br><b>Community</b></div>
+    <div class="phase">Phase 11<br><b>Premium</b></div>
+    <div class="phase">Phase 12<br><b>Ultimate</b></div>
+    <div class="phase">Phase 13<br><b>Owner Panel</b></div>
+    <div class="phase">Phase 14<br><b>Final Release</b></div>
   </div>
 </section>
 
@@ -193,13 +272,15 @@
       <h2>ZELROVA Community Server</h2>
       <span>Official Hub</span>
     </div>
+
     <div class="tag-cloud">
       <span>Anime</span><span>Gaming</span><span>Developer</span><span>Coding</span>
       <span>English</span><span>Japanese</span><span>Music</span><span>Fun</span>
       <span>Manga</span><span>Story Writer</span><span>Events</span><span>Support</span>
     </div>
+
     <br>
-    <a class="main-btn" href="https://discord.gg/YOUR_SERVER_INVITE" target="_blank">Join ZELROVA Server</a>
+    <a class="main-btn" href="https://discord.gg/32urRvMMHf" target="_blank">Join ZELROVA Server</a>
   </div>
 
   <div class="glass-card">
@@ -207,9 +288,41 @@
       <h2>Add ZELROVA Bot</h2>
       <span>Invite System</span>
     </div>
+
     <p style="line-height:1.8;color:#cfcfe0;">Add ZELROVA Bot to your Discord server and control everything from this dashboard.</p>
+
     <br>
-    <a class="main-btn" href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot%20applications.commands" target="_blank">Add Bot To Server</a>
+    <a class="main-btn" href="https://discord.com/oauth2/authorize?client_id=1518161863383187607&permissions=8&scope=bot%20applications.commands" target="_blank">Add Bot To Server</a>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <div class="glass-card">
+    <div class="section-title">
+      <h2>Analytics</h2>
+      <span>Live widgets</span>
+    </div>
+
+    <div class="analytics-bars">
+      <div><span>Moderation</span><i style="width: 82%;"></i></div>
+      <div><span>Security</span><i style="width: 94%;"></i></div>
+      <div><span>Community</span><i style="width: 71%;"></i></div>
+      <div><span>AI Usage</span><i style="width: 64%;"></i></div>
+    </div>
+  </div>
+
+  <div class="glass-card">
+    <div class="section-title">
+      <h2>Recent Activity</h2>
+      <span>Logs viewer</span>
+    </div>
+
+    <ul class="activity-list" id="activityList">
+      <li>Foundation system loaded successfully.</li>
+      <li>Dashboard routes are working.</li>
+      <li>JSON database connected.</li>
+      <li>Render deployment active.</li>
+    </ul>
   </div>
 </section>
 
@@ -221,5 +334,6 @@
 
 <div class="toast" id="toast">Saved successfully</div>
 <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
 </body>
 </html>

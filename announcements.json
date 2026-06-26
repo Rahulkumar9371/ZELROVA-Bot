@@ -1,1 +1,6 @@
-{}
+{
+    "enabled": true,
+    "channel_id": "",
+    "last_message": "",
+    "scheduled": []
+}

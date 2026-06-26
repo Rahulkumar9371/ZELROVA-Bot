@@ -1,507 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ZELROVA • Server Manager</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZELROVA Network Servers</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body class="zelrova-dashboard">
 
-<!-- ================= Sidebar ================= -->
+<div class="dashboard-bg">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="orb orb-3"></span>
+</div>
 
 <aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="ZELROVA">
+    <div>
+      <h2>ZELROVA</h2>
+      <p>Network Center</p>
+    </div>
+  </div>
 
-<div class="brand">
+  <nav class="side-nav">
+    <a href="/dashboard">🏠 Home</a>
+    <a href="/dashboard">⚡ Overview</a>
+    <a href="/moderation">🛡 Moderation</a>
+    <a href="/security">🔐 Security</a>
+    <a href="/automod">🤖 AutoMod</a>
+    <a href="/welcome">👋 Welcome</a>
+    <a href="/reaction-roles">🎭 Reaction Roles</a>
+    <a href="/tickets">🎫 Tickets</a>
+    <a href="/levels">📊 Levels</a>
+    <a href="/logs">📜 Logs</a>
+    <a href="/announcements">📢 Announcements</a>
+    <a href="/analytics">📈 Analytics</a>
+    <a href="/backups">☁ Backup</a>
+    <a href="/ai">🧠 AI</a>
+    <a href="/owner-panel">👑 Owner Panel</a>
+    <a href="/whitelist">⭐ Whitelist</a>
+    <a class="active" href="/servers">🌐 Servers</a>
+  </nav>
 
-<img src="{{ url_for('static', filename='logo.png') }}">
-
-<div>
-<h2>ZELROVA</h2>
-<p>Server Manager</p>
-</div>
-
-</div>
-
-<nav class="side-nav">
-
-<a href="/dashboard">⚡ Dashboard</a>
-<a href="/moderation">🛡 Moderation</a>
-<a href="/security">🔐 Security</a>
-<a href="/automod">🤖 AutoMod</a>
-<a href="/welcome">👋 Welcome</a>
-<a href="/reaction-roles">🎭 Reaction Roles</a>
-<a href="/tickets">🎫 Tickets</a>
-<a href="/levels">📊 Levels</a>
-<a href="/logs">📜 Logs</a>
-<a href="/analytics">📈 Analytics</a>
-<a href="/announcements">📢 Announcements</a>
-<a href="/backups">☁ Backup</a>
-<a href="/ai">🧠 AI Center</a>
-<a href="/owner-panel">👑 Owner Panel</a>
-
-<a class="active" href="/servers">
-
-🌐 Servers
-
-</a>
-
-</nav>
-
-<div class="premium-card">
-
-<span>MULTI SERVER</span>
-
-<h3>Global Network</h3>
-
-<p>
-
-Manage every Discord server connected to ZELROVA.
-
-</p>
-
-<button>
-
-Add Server
-
-</button>
-
-</div>
-
+  <div class="premium-card">
+    <span>ZELROVA NETWORK</span>
+    <h3>Trusted Servers</h3>
+    <p>Live network ranking, trust score, server stats and growth tracking.</p>
+    <button>Network Mode</button>
+  </div>
 </aside>
-
-<!-- ================= Main ================= -->
 
 <main class="main-panel">
 
 <header class="topbar">
+  <button class="menu-btn" id="menuBtn">☰</button>
 
-<button class="menu-btn" id="menuBtn">☰</button>
+  <div>
+    <h1>ZELROVA Network</h1>
+    <p>Live servers using ZELROVA Bot across Discord.</p>
+  </div>
 
-<div>
-
-<h1>
-
-Server Manager
-
-</h1>
-
-<p>
-
-Manage all connected Discord servers from one dashboard.
-
-</p>
-
-</div>
-
-<div class="top-actions">
-
-<button class="ghost-btn">
-
-Refresh
-
-</button>
-
-<button class="main-btn">
-
-Scan Servers
-
-</button>
-
-</div>
-
+  <div class="top-actions">
+    <a class="ghost-btn" href="https://discord.gg/32urRvMMHf" target="_blank">Join Server</a>
+    <a class="main-btn" href="https://discord.com/oauth2/authorize?client_id=1518161863383187607&permissions=8&scope=bot%20applications.commands" target="_blank">Add Bot</a>
+  </div>
 </header>
 
-<!-- Hero -->
-
 <section class="hero-panel glass-card">
+  <div>
+    <span class="tag">🌍 Live ZELROVA Network</span>
+    <h2>Top Trusted Servers Using ZELROVA</h2>
+    <p>
+      This page shows real connected servers from the ZELROVA database.
+      When ZELROVA joins a new server, the server can appear here with member count,
+      owner info, activity score, trust score and live statistics.
+    </p>
+  </div>
 
-<div>
-
-<span class="tag">
-
-MULTI SERVER CONTROL
-
-</span>
-
-<h2>
-
-Manage Every Server
-
-</h2>
-
-<p>
-
-View,
-configure,
-backup,
-protect,
-and monitor all connected Discord servers from one premium dashboard.
-
-</p>
-
-</div>
-
-<div class="server-status">
-
-<span class="status-dot"></span>
-
-<div>
-
-<h3>
-
-128 Servers
-
-</h3>
-
-<p>
-
-All Connected
-
-</p>
-
-</div>
-
-</div>
-
+  <div class="server-status">
+    <span class="status-dot"></span>
+    <div>
+      <h3>Network Online</h3>
+      <p>Live ranking system active</p>
+    </div>
+  </div>
 </section>
-
-<!-- Stats -->
 
 <section class="stats-grid">
+  <div class="stat-card glass-card">
+    <span>Total Servers</span>
+    <h2>{{ data.stats.servers }}</h2>
+    <p>Connected to ZELROVA</p>
+  </div>
 
-<div class="stat-card glass-card">
+  <div class="stat-card glass-card">
+    <span>Total Members</span>
+    <h2>{{ data.stats.users }}</h2>
+    <p>Across all servers</p>
+  </div>
 
-<span>
+  <div class="stat-card glass-card">
+    <span>Commands Used</span>
+    <h2>{{ data.stats.commands }}</h2>
+    <p>Global activity</p>
+  </div>
 
-Connected Servers
-
-</span>
-
-<h2>
-
-128
-
-</h2>
-
-<p>
-
-+3 Today
-
-</p>
-
-</div>
-
-<div class="stat-card glass-card">
-
-<span>
-
-Total Members
-
-</span>
-
-<h2>
-
-248K
-
-</h2>
-
-<p>
-
-Growing
-
-</p>
-
-</div>
-
-<div class="stat-card glass-card">
-
-<span>
-
-Premium Servers
-
-</span>
-
-<h2>
-
-18
-
-</h2>
-
-<p>
-
-Active
-
-</p>
-
-</div>
-
-<div class="stat-card glass-card">
-
-<span>
-
-Health
-
-</span>
-
-<h2>
-
-99%
-
-</h2>
-
-<p>
-
-Excellent
-
-</p>
-
-</div>
-
+  <div class="stat-card glass-card">
+    <span>Network Trust</span>
+    <h2>{{ data.stats.security_score }}%</h2>
+    <p>Average health score</p>
+  </div>
 </section>
-
-<!-- Modules -->
 
 <section class="glass-card">
-
-<div class="section-title">
-
-<h2>
-
-Server Features
-
-</h2>
-
-<span>
-
-Manager
-
-</span>
-
-</div>
-
-<div class="module-grid">
-
-<div class="module-card">
-
-<h3>
-
-Server Detection
-
-</h3>
-
-<p>
-
-Automatically detect new servers.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox" checked>
-
-<span></span>
-
-</label>
-
-</div>
-
-<div class="module-card">
-
-<h3>
-
-Multi Server
-
-</h3>
-
-<p>
-
-Manage unlimited servers.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox" checked>
-
-<span></span>
-
-</label>
-
-</div>
-
-<div class="module-card">
-
-<h3>
-
-Server Health
-
-</h3>
-
-<p>
-
-Analyze server performance.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox" checked>
-
-<span></span>
-
-</label>
-
-</div>
-
-<div class="module-card">
-
-<h3>
-
-Auto Backup
-
-</h3>
-
-<p>
-
-Backup every connected server.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox" checked>
-
-<span></span>
-
-</label>
-
-</div>
-
-<div class="module-card">
-
-<h3>
-
-Premium Status
-
-</h3>
-
-<p>
-
-Premium subscription checker.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox">
-
-<span></span>
-
-</label>
-
-</div>
-
-<div class="module-card">
-
-<h3>
-
-Sync Settings
-
-</h3>
-
-<p>
-
-Synchronize dashboard settings.
-
-</p>
-
-<label class="switch">
-
-<input type="checkbox">
-
-<span></span>
-
-</label>
-
-</div>
-
-</div>
-
+  <div class="section-title">
+    <h2>🏆 Top Trusted Servers</h2>
+    <span>Live Ranking</span>
+  </div>
+
+  <div class="module-grid">
+    <div class="module-card">
+      <h3>🥇 #1 ZELROVA Community</h3>
+      <p>
+        👑 Owner: Rahul<br>
+        👥 Members: 24.8K<br>
+        ⚡ Commands: 91K<br>
+        ⭐ Trust Score: 99%<br>
+        🟢 Status: Active
+      </p>
+    </div>
+
+    <div class="module-card">
+      <h3>🥈 #2 Anime Network</h3>
+      <p>
+        👑 Owner: Server Owner<br>
+        👥 Members: Live Database<br>
+        ⚡ Commands: Live Data<br>
+        ⭐ Trust Score: Calculated<br>
+        🟢 Status: Active
+      </p>
+    </div>
+
+    <div class="module-card">
+      <h3>🥉 #3 Gaming Hub</h3>
+      <p>
+        👑 Owner: Server Owner<br>
+        👥 Members: Live Database<br>
+        ⚡ Commands: Live Data<br>
+        ⭐ Trust Score: Calculated<br>
+        🟢 Status: Active
+      </p>
+    </div>
+  </div>
 </section>
-
-<!-- Server List -->
-
 <section class="glass-card">
 
-<div class="section-title">
+    <div class="section-title">
+        <h2>🌐 Live Server Directory</h2>
+        <span>Automatically Updated</span>
+    </div>
 
-<h2>
+    <div class="search-box">
+        <input
+            type="text"
+            id="serverSearch"
+            placeholder="Search server..."
+        >
+    </div>
 
-Connected Servers
+    <div id="serverContainer" class="module-grid">
 
-</h2>
+        {% if data.server_list %}
 
-<span>
+        {% for server in data.server_list %}
 
-Preview
+        <div class="module-card server-card">
 
-</span>
+            <div class="server-header">
 
-</div>
+                <img
+                src="{{ server.icon }}"
+                class="server-icon"
+                onerror="this.src='{{ url_for('static', filename='logo.png') }}'">
 
-<ul class="activity-list">
+                <div>
 
-<li>
+                    <h3>{{ server.name }}</h3>
 
-🟢 ZELROVA Community
-— 24,000 Members
+                    <small>
+                        ID :
+                        {{ server.id }}
+                    </small>
 
-</li>
+                </div>
 
-<li>
+            </div>
 
-🟢 Anime World
-— 12,800 Members
+            <hr>
 
-</li>
+            <p>👑 Owner : {{ server.owner }}</p>
 
-<li>
+            <p>👥 Members : {{ server.members }}</p>
 
-🟢 Coding Hub
-— 9,500 Members
+            <p>📈 Commands : {{ server.commands }}</p>
 
-</li>
+            <p>🎫 Tickets : {{ server.tickets }}</p>
 
-<li>
+            <p>⚠ Warnings : {{ server.warnings }}</p>
 
-🟢 Gaming Zone
-— 18,200 Members
+            <p>🤖 Joined :
+                {{ server.join_date }}
+            </p>
 
-</li>
+            <p>⭐ Trust :
+                {{ server.trust_score }}%
+            </p>
 
-<li>
+            <p>❤️ Activity :
+                {{ server.activity_score }}%
+            </p>
 
-🟢 English Learning
-— 7,400 Members
+            <p>
 
-</li>
+                {% if server.online %}
 
-<li>
+                🟢 Online
 
-🟢 Japanese Club
-— 5,900 Members
+                {% else %}
 
-</li>
+                🔴 Offline
 
-</ul>
+                {% endif %}
+
+            </p>
+
+            {% if server.premium %}
+
+            <span class="premium-badge">
+
+                💎 Premium
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+
+        <div class="module-card">
+
+            <h3>No Live Servers Yet</h3>
+
+            <p>
+
+                As soon as ZELROVA joins new Discord servers,
+
+                they will automatically appear here.
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </section>
 
-<!-- Analytics -->
 
 <section class="dashboard-grid">
 
@@ -509,183 +279,231 @@ Preview
 
 <div class="section-title">
 
-<h2>
+<h2>📈 Network Analytics</h2>
 
-Server Analytics
-
-</h2>
-
-<span>
-
-Overview
-
-</span>
+<span>Live Statistics</span>
 
 </div>
 
-<div class="status-list">
+<div class="analytics-bars">
 
 <div>
 
-<span>
+<span>Server Growth</span>
 
-Messages Today
-
-</span>
-
-<b>
-
-1.2M
-
-</b>
+<i style="width:82%;"></i>
 
 </div>
 
 <div>
 
-<span>
+<span>Commands</span>
 
-Commands Used
-
-</span>
-
-<b>
-
-95K
-
-</b>
+<i style="width:91%;"></i>
 
 </div>
 
 <div>
 
-<span>
+<span>Moderation</span>
 
-Tickets
-
-</span>
-
-<b>
-
-243
-
-</b>
+<i style="width:76%;"></i>
 
 </div>
 
 <div>
 
-<span>
+<span>Tickets</span>
 
-Warnings
-
-</span>
-
-<b>
-
-64
-
-</b>
+<i style="width:63%;"></i>
 
 </div>
 
 <div>
 
-<span>
+<span>AI Usage</span>
 
-New Members
-
-</span>
-
-<b>
-
-518
-
-</b>
+<i style="width:58%;"></i>
 
 </div>
 
 </div>
 
 </div>
+
+
 
 <div class="glass-card">
 
 <div class="section-title">
 
-<h2>
+<h2>🔥 Recently Joined</h2>
 
-Recent Activity
-
-</h2>
-
-<span>
-
-Latest
-
-</span>
+<span>Newest Servers</span>
 
 </div>
 
 <ul class="activity-list">
 
-<li>
+{% if data.server_list %}
 
-New server connected.
-
-</li>
+{% for server in data.server_list[:10] %}
 
 <li>
 
-Backup completed.
+🌐
+
+<b>{{ server.name }}</b>
+
+joined ZELROVA
+
+({{ server.join_date }})
 
 </li>
+
+{% endfor %}
+
+{% else %}
 
 <li>
 
-Server health checked.
+Waiting for first public servers...
 
 </li>
 
-<li>
-
-Premium activated.
-
-</li>
-
-<li>
-
-Dashboard synchronized.
-
-</li>
-
-<li>
-
-Statistics refreshed.
-
-</li>
+{% endif %}
 
 </ul>
 
 </div>
 
 </section>
+<section class="glass-card">
+
+    <div class="section-title">
+        <h2>🏅 Server Achievements</h2>
+        <span>ZELROVA Network</span>
+    </div>
+
+    <div class="module-grid">
+
+        <div class="module-card">
+            <h3>👑 Trusted Server</h3>
+            <p>Given to servers with excellent trust score and activity.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🛡 Security Master</h3>
+            <p>Advanced moderation and security configuration enabled.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🎫 Support Champion</h3>
+            <p>Excellent ticket response and support quality.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🤖 AI Ready</h3>
+            <p>Using ZELROVA AI modules for community assistance.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>💎 Premium</h3>
+            <p>Premium network server with advanced dashboard features.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🚀 Fast Growing</h3>
+            <p>Rapidly growing community with high activity.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="glass-card">
+
+    <div class="section-title">
+        <h2>📌 How Server Ranking Works</h2>
+        <span>Automatic Calculation</span>
+    </div>
+
+    <div class="module-grid">
+
+        <div class="module-card">
+            <h3>👥 Members</h3>
+            <p>More active members increase ranking.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>⚡ Commands</h3>
+            <p>Command usage increases activity score.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🎫 Tickets</h3>
+            <p>Support quality contributes to trust.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🛡 Moderation</h3>
+            <p>Healthy moderation improves security score.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>🤖 AI Usage</h3>
+            <p>AI features improve automation score.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>⭐ Overall Trust</h3>
+            <p>Final Trust Score is calculated from all metrics.</p>
+        </div>
+
+    </div>
+
+</section>
+
 
 <footer class="dashboard-footer">
 
-© 2026 ZELROVA Bot • Server Manager
+    <p>
+        © 2026 ZELROVA Network —
+        One Bot. Everything You Need.
+    </p>
 
 </footer>
 
 </main>
 
 <div class="toast" id="toast">
-
-Saved Successfully
-
+    Network Updated
 </div>
 
 <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<script>
+const search=document.getElementById("serverSearch");
+
+if(search){
+
+search.addEventListener("keyup",()=>{
+
+const value=search.value.toLowerCase();
+
+document.querySelectorAll(".server-card").forEach(card=>{
+
+card.style.display=
+card.innerText.toLowerCase().includes(value)
+?"block":"none";
+
+});
+
+});
+
+}
+</script>
 
 </body>
 </html>

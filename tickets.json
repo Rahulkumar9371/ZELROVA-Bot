@@ -1,1 +1,9 @@
-{}
+{
+    "enabled": true,
+    "categories": [],
+    "open_tickets": [],
+    "closed_tickets": [],
+    "transcripts": true,
+    "rating": true,
+    "analytics": true
+}

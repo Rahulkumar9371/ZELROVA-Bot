@@ -21,6 +21,7 @@
         "analytics": true,
         "backup": true,
         "ai": true,
+        "music": false,
         "community": true,
         "owner_panel": true,
         "whitelist": true,

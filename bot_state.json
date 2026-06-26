@@ -1,0 +1,9 @@
+{
+    "status": "Online",
+    "latency": "42ms",
+    "servers": 1,
+    "users": 24800,
+    "commands": 91000,
+    "security_score": 98,
+    "last_update": ""
+}

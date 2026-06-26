@@ -1,11 +1,22 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
 import json
 import os
 from datetime import datetime
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "CHANGE_THIS_SECRET_KEY")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+BOT_CLIENT_ID = os.getenv("CLIENT_ID", "1518161863383187607")
+DISCORD_SERVER_INVITE = os.getenv("DISCORD_SERVER_INVITE", "https://discord.gg/32urRvMMHf")
+
+INVITE_URL = (
+    f"https://discord.com/oauth2/authorize"
+    f"?client_id={BOT_CLIENT_ID}"
+    f"&permissions=8"
+    f"&scope=bot%20applications.commands"
+)
 
 JSON_FILES = {
     "server_config": "server_config.json",
@@ -17,8 +28,8 @@ JSON_FILES = {
     "tickets": "tickets.json",
     "warnings": "warnings.json",
     "whitelist": "whitelist.json",
+    "bot_state": "bot_state.json",
 }
-
 
 DEFAULT_DATA = {
     "server_config": {
@@ -41,12 +52,16 @@ DEFAULT_DATA = {
             "levels": True,
             "logs": True,
             "announcements": True,
-            "ai": True,
+            "analytics": True,
             "backup": True,
-            "owner_panel": True
+            "ai": True,
+            "music": False,
+            "community": True,
+            "owner_panel": True,
+            "whitelist": True,
+            "servers": True
         }
     },
-
     "automod": {
         "bad_words": True,
         "spam_protection": True,
@@ -62,14 +77,12 @@ DEFAULT_DATA = {
         "auto_kick": False,
         "auto_ban": False
     },
-
     "announcements": {
         "enabled": True,
         "channel_id": "",
         "last_message": "",
         "scheduled": []
     },
-
     "levels": {
         "enabled": True,
         "xp": True,
@@ -82,7 +95,6 @@ DEFAULT_DATA = {
         "inventory": True,
         "daily_rewards": True
     },
-
     "logs": {
         "enabled": True,
         "moderation_logs": [],
@@ -90,12 +102,10 @@ DEFAULT_DATA = {
         "ticket_logs": [],
         "system_logs": []
     },
-
     "reaction_roles": {
         "enabled": True,
         "roles": []
     },
-
     "tickets": {
         "enabled": True,
         "categories": [],
@@ -105,75 +115,98 @@ DEFAULT_DATA = {
         "rating": True,
         "analytics": True
     },
-
     "warnings": {
         "users": {}
     },
-
     "whitelist": {
         "enabled": True,
         "servers": [],
         "users": [],
         "owners": []
+    },
+    "bot_state": {
+        "status": "Online",
+        "latency": "42ms",
+        "servers": 1,
+        "users": 24800,
+        "commands": 91000,
+        "security_score": 98,
+        "last_update": ""
     }
 }
 
 
-def ensure_json_files():
-    for key, filename in JSON_FILES.items():
-        path = os.path.join(BASE_DIR, filename)
-        if not os.path.exists(path):
-            save_json(key, DEFAULT_DATA[key])
+def path_for(key):
+    return os.path.join(BASE_DIR, JSON_FILES[key])
+
+
+def save_json(key, data):
+    with open(path_for(key), "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+
+def deep_merge(default, current):
+    if not isinstance(default, dict) or not isinstance(current, dict):
+        return current
+
+    merged = default.copy()
+
+    for key, value in current.items():
+        if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+            merged[key] = deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+
+    return merged
 
 
 def load_json(key):
-    path = os.path.join(BASE_DIR, JSON_FILES[key])
-
-    if not os.path.exists(path):
+    if not os.path.exists(path_for(key)):
         save_json(key, DEFAULT_DATA[key])
         return DEFAULT_DATA[key]
 
     try:
-        with open(path, "r", encoding="utf-8") as file:
-            data = json.load(file)
+        with open(path_for(key), "r", encoding="utf-8") as file:
+            current = json.load(file)
 
-        if not data:
-            return DEFAULT_DATA[key]
+        fixed = deep_merge(DEFAULT_DATA[key], current)
 
-        return data
+        if fixed != current:
+            save_json(key, fixed)
+
+        return fixed
 
     except Exception:
         save_json(key, DEFAULT_DATA[key])
         return DEFAULT_DATA[key]
 
 
-def save_json(key, data):
-    path = os.path.join(BASE_DIR, JSON_FILES[key])
-
-    with open(path, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
+def ensure_json_files():
+    for key in JSON_FILES:
+        load_json(key)
 
 
 def add_log(category, message):
     logs = load_json("logs")
 
-    log_item = {
-        "message": message,
-        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-
     if category not in logs:
         logs[category] = []
 
-    logs[category].insert(0, log_item)
-    logs[category] = logs[category][:50]
+    logs[category].insert(0, {
+        "message": message,
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
 
+    logs[category] = logs[category][:100]
     save_json("logs", logs)
 
 
 def get_dashboard_data():
+    config = load_json("server_config")
+    bot_state = load_json("bot_state")
+
     return {
-        "server_config": load_json("server_config"),
+        "server_config": config,
         "automod": load_json("automod"),
         "announcements": load_json("announcements"),
         "levels": load_json("levels"),
@@ -182,16 +215,27 @@ def get_dashboard_data():
         "tickets": load_json("tickets"),
         "warnings": load_json("warnings"),
         "whitelist": load_json("whitelist"),
+        "bot_state": bot_state,
+        "invite_url": INVITE_URL,
+        "server_invite": DISCORD_SERVER_INVITE,
         "stats": {
-            "servers": 1,
-            "users": 24800,
-            "commands": 91000,
-            "security_score": 98,
-            "latency": "42ms",
+            "servers": bot_state.get("servers", 1),
+            "users": bot_state.get("users", 24800),
+            "commands": bot_state.get("commands", 91000),
+            "security_score": bot_state.get("security_score", 98),
+            "latency": bot_state.get("latency", "42ms"),
             "database": "JSON Active",
             "hosting": "Render Working",
             "dashboard": "Routes Active"
         }
+    }
+
+
+@app.context_processor
+def inject_global_links():
+    return {
+        "invite_url": INVITE_URL,
+        "server_invite": DISCORD_SERVER_INVITE
     }
 
 
@@ -287,92 +331,109 @@ def api_dashboard_data():
 
 @app.route("/api/save/server-config", methods=["POST"])
 def api_save_server_config():
-    data = request.get_json()
+    data = request.get_json() or {}
     current = load_json("server_config")
     current.update(data)
     save_json("server_config", current)
-    add_log("system_logs", "Server configuration updated from dashboard.")
+    add_log("system_logs", "Server configuration updated.")
     return jsonify({"success": True, "message": "Server settings saved."})
 
 
 @app.route("/api/save/modules", methods=["POST"])
 def api_save_modules():
-    data = request.get_json()
+    data = request.get_json() or {}
     config = load_json("server_config")
-
-    if "modules" not in config:
-        config["modules"] = {}
-
+    config.setdefault("modules", {})
     config["modules"].update(data)
     save_json("server_config", config)
-    add_log("system_logs", "Module settings updated.")
-    return jsonify({"success": True, "message": "Modules updated."})
+    add_log("system_logs", "Dashboard module settings updated.")
+    return jsonify({"success": True, "message": "Modules saved."})
 
 
 @app.route("/api/save/automod", methods=["POST"])
 def api_save_automod():
-    data = request.get_json()
-    automod_data = load_json("automod")
-    automod_data.update(data)
-    save_json("automod", automod_data)
+    data = request.get_json() or {}
+    current = load_json("automod")
+    current.update(data)
+    save_json("automod", current)
     add_log("moderation_logs", "AutoMod settings updated.")
-    return jsonify({"success": True, "message": "AutoMod settings saved."})
+    return jsonify({"success": True, "message": "AutoMod saved."})
 
 
 @app.route("/api/save/levels", methods=["POST"])
 def api_save_levels():
-    data = request.get_json()
-    levels_data = load_json("levels")
-    levels_data.update(data)
-    save_json("levels", levels_data)
-    add_log("system_logs", "Level system settings updated.")
-    return jsonify({"success": True, "message": "Level settings saved."})
+    data = request.get_json() or {}
+    current = load_json("levels")
+    current.update(data)
+    save_json("levels", current)
+    add_log("system_logs", "Level settings updated.")
+    return jsonify({"success": True, "message": "Levels saved."})
 
 
 @app.route("/api/save/tickets", methods=["POST"])
 def api_save_tickets():
-    data = request.get_json()
-    tickets_data = load_json("tickets")
-    tickets_data.update(data)
-    save_json("tickets", tickets_data)
-    add_log("ticket_logs", "Ticket system settings updated.")
-    return jsonify({"success": True, "message": "Ticket settings saved."})
+    data = request.get_json() or {}
+    current = load_json("tickets")
+    current.update(data)
+    save_json("tickets", current)
+    add_log("ticket_logs", "Ticket settings updated.")
+    return jsonify({"success": True, "message": "Tickets saved."})
 
 
 @app.route("/api/save/reaction-roles", methods=["POST"])
 def api_save_reaction_roles():
-    data = request.get_json()
-    reaction_data = load_json("reaction_roles")
-    reaction_data.update(data)
-    save_json("reaction_roles", reaction_data)
+    data = request.get_json() or {}
+    current = load_json("reaction_roles")
+    current.update(data)
+    save_json("reaction_roles", current)
     add_log("system_logs", "Reaction roles settings updated.")
     return jsonify({"success": True, "message": "Reaction roles saved."})
 
 
 @app.route("/api/save/announcements", methods=["POST"])
 def api_save_announcements():
-    data = request.get_json()
-    announcement_data = load_json("announcements")
-    announcement_data.update(data)
-    save_json("announcements", announcement_data)
+    data = request.get_json() or {}
+    current = load_json("announcements")
+    current.update(data)
+    save_json("announcements", current)
     add_log("system_logs", "Announcement settings updated.")
-    return jsonify({"success": True, "message": "Announcement settings saved."})
+    return jsonify({"success": True, "message": "Announcements saved."})
 
 
 @app.route("/api/save/whitelist", methods=["POST"])
 def api_save_whitelist():
-    data = request.get_json()
-    whitelist_data = load_json("whitelist")
-    whitelist_data.update(data)
-    save_json("whitelist", whitelist_data)
+    data = request.get_json() or {}
+    current = load_json("whitelist")
+    current.update(data)
+    save_json("whitelist", current)
     add_log("security_logs", "Whitelist settings updated.")
     return jsonify({"success": True, "message": "Whitelist saved."})
 
 
+@app.route("/api/bot-state/update", methods=["POST"])
+def api_bot_state_update():
+    data = request.get_json() or {}
+    state = load_json("bot_state")
+    state.update(data)
+    state["last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    save_json("bot_state", state)
+    return jsonify({"success": True, "message": "Bot state updated."})
+
+
 @app.route("/api/owner/action", methods=["POST"])
 def api_owner_action():
-    data = request.get_json()
+    data = request.get_json() or {}
     action = data.get("action", "Unknown Action")
+
+    config = load_json("server_config")
+
+    if action == "Maintenance Mode":
+        config["maintenance_mode"] = not config.get("maintenance_mode", False)
+        save_json("server_config", config)
+
+    if action == "Developer Mode":
+        config["developer_mode"] = not config.get("developer_mode", False)
+        save_json("server_config", config)
 
     add_log("system_logs", f"Owner action executed: {action}")
 
@@ -384,13 +445,13 @@ def api_owner_action():
 
 @app.route("/api/logs/clear", methods=["POST"])
 def api_clear_logs():
-    logs_data = load_json("logs")
+    logs = load_json("logs")
 
-    for key in logs_data:
-        if isinstance(logs_data[key], list):
-            logs_data[key] = []
+    for key in logs:
+        if isinstance(logs[key], list):
+            logs[key] = []
 
-    save_json("logs", logs_data)
+    save_json("logs", logs)
     return jsonify({"success": True, "message": "Logs cleared."})
 
 
@@ -418,10 +479,13 @@ def api_create_backup():
 
 @app.route("/api/status")
 def api_status():
+    state = load_json("bot_state")
+
     return jsonify({
         "success": True,
         "bot": "ZELROVA",
-        "status": "Online",
+        "status": state.get("status", "Online"),
+        "latency": state.get("latency", "42ms"),
         "website": "Running",
         "dashboard": "Active",
         "database": "JSON",
@@ -435,6 +499,7 @@ def page_not_found(error):
     return redirect(url_for("dashboard"))
 
 
+ensure_json_files()
+
 if __name__ == "__main__":
-    ensure_json_files()
     app.run(host="0.0.0.0", port=5000, debug=True)
