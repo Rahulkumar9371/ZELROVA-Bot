@@ -1,7 +1,10 @@
 import asyncio
 import os
+from datetime import datetime, timezone
+
 import requests
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 
 from config import Config
@@ -38,103 +41,196 @@ COGS = [
 ]
 
 
-DASHBOARD_URL = os.getenv("DASHBOARD_URL", "http://127.0.0.1:5000")
+DASHBOARD_URL = Config.DASHBOARD_URL.rstrip("/")
 
 
-def dashboard_get(endpoint):
+def safe_post(endpoint, payload):
     try:
-        response = requests.get(
-            f"{DASHBOARD_URL}{endpoint}",
-            timeout=5
-        )
-        if response.status_code == 200:
-            return response.json()
-    except Exception:
-        pass
-
-    return None
-
-
-def dashboard_post(endpoint, payload):
-    try:
-        response = requests.post(
+        res = requests.post(
             f"{DASHBOARD_URL}{endpoint}",
             json=payload,
-            timeout=5
+            timeout=8
         )
-        if response.status_code in (200, 201):
-            return response.json()
+        return res.status_code, res.text
+    except Exception as e:
+        return 0, str(e)
+
+
+def safe_get(endpoint):
+    try:
+        res = requests.get(
+            f"{DASHBOARD_URL}{endpoint}",
+            timeout=8
+        )
+        if res.status_code == 200:
+            return res.json()
     except Exception:
         pass
-
     return None
 
 
-def calculate_total_members():
-    return sum(guild.member_count or 0 for guild in bot.guilds)
+def get_server_stats(guild_id):
+    server = db.get_server(guild_id)
+    stats = server.get("stats", {})
+
+    return {
+        "commands": int(stats.get("commands", 0) or 0),
+        "tickets": int(stats.get("tickets", 0) or 0),
+        "warnings": int(stats.get("warnings", 0) or 0),
+        "messages": int(stats.get("messages", 0) or 0),
+        "joins": int(stats.get("joins", 0) or 0),
+        "bans": int(stats.get("bans", 0) or 0),
+        "kicks": int(stats.get("kicks", 0) or 0)
+    }
 
 
-def calculate_total_commands():
-    data = db.load()
-    total = 0
+def calculate_trust_score(guild, stats):
+    members = guild.member_count or 0
 
-    for server in data.get("servers", {}).values():
-        total += int(server.get("stats", {}).get("commands", 0) or 0)
+    score = 50
+    score += min(20, members // 50)
+    score += min(15, stats["commands"] // 20)
+    score += min(10, stats["tickets"] * 2)
+    score -= min(25, stats["warnings"])
 
-    return total
+    return max(0, min(100, int(score)))
 
 
-def calculate_security_score():
+def calculate_activity_score(stats):
+    score = 20
+    score += min(35, stats["messages"] // 50)
+    score += min(30, stats["commands"] // 10)
+    score += min(15, stats["tickets"] * 2)
+
+    return max(0, min(100, int(score)))
+
+
+async def get_owner_name(guild):
+    try:
+        owner = guild.owner or await bot.fetch_user(guild.owner_id)
+        return str(owner)
+    except Exception:
+        return str(guild.owner_id)
+
+
+def calculate_global_security_score():
     if not bot.guilds:
         return 0
 
-    total_score = 0
+    total = 0
 
     for guild in bot.guilds:
         server = db.get_server(guild.id)
         modules = server.get("modules", {})
 
         score = 0
-        if modules.get("security"):
+        if modules.get("security", True):
             score += 25
-        if modules.get("automod"):
+        if modules.get("automod", True):
             score += 25
-        if modules.get("moderation"):
+        if modules.get("moderation", True):
             score += 20
-        if modules.get("logs"):
+        if modules.get("logs", True):
             score += 15
-        if modules.get("backup"):
+        if modules.get("backup", True):
             score += 15
 
-        total_score += score
+        total += min(100, score)
 
-    return round(total_score / len(bot.guilds))
-
-
-def sync_guild_to_database(guild):
-    server = db.get_server(guild.id)
-
-    server["server_name"] = guild.name
-    server["server_id"] = str(guild.id)
-    server["owner_id"] = str(guild.owner_id)
-    server["member_count"] = guild.member_count or 0
-    server["icon_url"] = guild.icon.url if guild.icon else None
-    server["bot_joined"] = True
-
-    db.update_server(guild.id, server)
+    return round(total / len(bot.guilds))
 
 
-def sync_dashboard_state():
-    payload = {
-        "status": "Online",
+async def build_live_server_payload():
+    servers = []
+
+    for guild in bot.guilds:
+        db.mark_server_live(guild)
+        stats = get_server_stats(guild.id)
+        owner_name = await get_owner_name(guild)
+
+        joined_at = "Unknown"
+        if guild.me and guild.me.joined_at:
+            joined_at = guild.me.joined_at.strftime("%Y-%m-%d %H:%M:%S")
+
+        servers.append({
+            "id": str(guild.id),
+            "name": guild.name,
+            "owner_id": str(guild.owner_id),
+            "owner_name": owner_name,
+            "members": guild.member_count or 0,
+            "icon": guild.icon.url if guild.icon else None,
+            "joined_at": joined_at,
+            "commands": stats["commands"],
+            "tickets": stats["tickets"],
+            "warnings": stats["warnings"],
+            "messages": stats["messages"],
+            "trust_score": calculate_trust_score(guild, stats),
+            "activity_score": calculate_activity_score(stats),
+            "online": True,
+            "premium": db.is_premium_server(guild.id),
+            "bot_joined": True
+        })
+
+    return {
+        "servers": servers,
+        "users": sum(s["members"] for s in servers),
+        "commands": sum(s["commands"] for s in servers),
         "latency": f"{round(bot.latency * 1000)}ms",
-        "servers": len(bot.guilds),
-        "users": calculate_total_members(),
-        "commands": calculate_total_commands(),
-        "security_score": calculate_security_score()
+        "security_score": calculate_global_security_score(),
+        "synced_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    dashboard_post("/api/bot-state/update", payload)
+
+async def sync_live_dashboard():
+    payload = await build_live_server_payload()
+
+    db.update_bot_state(
+        status="online",
+        servers=len(payload["servers"]),
+        users=payload["users"],
+        latency=payload["latency"]
+    )
+
+    status, text = safe_post("/api/bot/live-sync", payload)
+
+    if status == 200:
+        print(f"[LIVE SYNC] Synced {len(payload['servers'])} servers.")
+    else:
+        print(f"[LIVE SYNC ERROR] {status} {text}")
+
+
+def get_music_cog():
+    return bot.get_cog("Music")
+
+
+async def execute_music_action(action, payload):
+    music = get_music_cog()
+
+    if not music:
+        return "Music cog not loaded."
+
+    try:
+        if action == "music_pause":
+            result = await music.dashboard_pause()
+        elif action == "music_resume":
+            result = await music.dashboard_resume()
+        elif action == "music_skip":
+            result = await music.dashboard_skip()
+        elif action == "music_stop":
+            result = await music.dashboard_stop()
+        elif action == "music_volume":
+            result = await music.dashboard_volume(int(payload.get("value", 75)))
+        elif action == "music_loop":
+            result = await music.dashboard_loop()
+        elif action == "music_shuffle":
+            result = await music.dashboard_shuffle()
+        else:
+            result = f"Unsupported music action: {action}"
+
+        return result
+
+    except Exception as e:
+        return f"Music action failed: {e}"
 
 
 async def execute_owner_action(action_item):
@@ -150,11 +246,15 @@ async def execute_owner_action(action_item):
             guild = bot.get_guild(server_id)
 
             if not guild:
-                result = "Server not found or bot is not in that server."
+                result = "Server not found or bot already left."
             else:
                 name = guild.name
                 await guild.leave()
+                db.mark_server_removed(server_id)
                 result = f"ZELROVA left server: {name}"
+
+        elif action.startswith("music_"):
+            result = await execute_music_action(action, payload)
 
         elif action == "Global Broadcast":
             message = payload.get("message") or "ZELROVA Broadcast"
@@ -196,42 +296,42 @@ async def execute_owner_action(action_item):
             result = f"Developer mode: {not current}"
 
         elif action == "sync_modules":
-            result = "Module sync received by bot."
+            result = "Modules synced."
 
         elif action == "sync_automod":
-            result = "AutoMod sync received by bot."
+            result = "AutoMod synced."
 
         else:
             result = f"Unknown owner action: {action}"
 
-    except Exception as error:
-        result = f"Action failed: {error}"
+    except Exception as e:
+        result = f"Action failed: {e}"
 
-    dashboard_post("/api/owner/action-complete", {
+    safe_post("/api/owner/action-complete", {
         "action_id": action_id,
         "result": result
     })
 
+    print(f"[OWNER ACTION] {action} -> {result}")
+    await sync_live_dashboard()
 
-@tasks.loop(seconds=15)
+
+@tasks.loop(seconds=8)
 async def owner_action_loop():
-    actions = dashboard_get("/api/owner/actions")
+    actions = safe_get("/api/owner/actions")
 
     if not actions:
         return
 
     pending = actions.get("pending", [])
 
-    if not pending:
-        return
-
     for action_item in pending[:5]:
         await execute_owner_action(action_item)
 
 
-@tasks.loop(minutes=2)
-async def dashboard_sync_loop():
-    sync_dashboard_state()
+@tasks.loop(seconds=20)
+async def live_sync_loop():
+    await sync_live_dashboard()
 
 
 @bot.event
@@ -250,31 +350,20 @@ async def on_ready():
         status=discord.Status.online
     )
 
-    db.update_bot_state(
-        status="online",
-        servers=len(bot.guilds),
-        users=calculate_total_members()
-    )
-
-    data = db.load()
-    live_guild_ids = [str(guild.id) for guild in bot.guilds]
-
-    for guild_id in data.get("servers", {}):
-        if guild_id not in live_guild_ids:
-            data["servers"][guild_id]["bot_joined"] = False
-            data["servers"][guild_id]["online"] = False
-            data["servers"][guild_id]["left_at"] = "Bot left or not connected"
-
-    db.save(data)
-
     for guild in bot.guilds:
-        sync_guild_to_database(guild)
+        db.mark_server_live(guild)
         print(f"Server detected: {guild.name} ({guild.id})")
 
-    sync_dashboard_state()
+    try:
+        synced = await bot.tree.sync()
+        print(f"Slash commands synced: {len(synced)}")
+    except Exception as e:
+        print(f"Slash sync failed: {e}")
 
-    if not dashboard_sync_loop.is_running():
-        dashboard_sync_loop.start()
+    await sync_live_dashboard()
+
+    if not live_sync_loop.is_running():
+        live_sync_loop.start()
 
     if not owner_action_loop.is_running():
         owner_action_loop.start()
@@ -282,34 +371,39 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    sync_guild_to_database(guild)
-
+    db.mark_server_live(guild)
     db.add_log(guild.id, "system", f"ZELROVA joined server: {guild.name}")
-
-    sync_dashboard_state()
-
     print(f"New server joined: {guild.name} ({guild.id})")
+    await sync_live_dashboard()
 
 
 @bot.event
 async def on_guild_remove(guild):
-    data = db.load()
-    guild_id = str(guild.id)
-
-    if guild_id in data.get("servers", {}):
-        data["servers"][guild_id]["bot_joined"] = False
-        data["servers"][guild_id]["left_at"] = "Left server"
-        db.save(data)
-
-    sync_dashboard_state()
-
+    db.mark_server_removed(guild.id)
     print(f"Removed from server: {guild.name} ({guild.id})")
+    await sync_live_dashboard()
+
+
+@bot.event
+async def on_member_join(member):
+    if member.guild:
+        db.increment_stat(member.guild.id, "joins")
+        db.mark_server_live(member.guild)
+        await sync_live_dashboard()
+
+
+@bot.event
+async def on_member_remove(member):
+    if member.guild:
+        db.mark_server_live(member.guild)
+        await sync_live_dashboard()
 
 
 @bot.event
 async def on_command(ctx):
     if ctx.guild:
         db.increment_stat(ctx.guild.id, "commands")
+        await sync_live_dashboard()
 
 
 @bot.event
@@ -338,6 +432,62 @@ async def on_command_error(ctx, error):
         print(error)
 
 
+@bot.tree.command(name="z", description="Show all ZELROVA slash commands")
+async def z_help(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="📜 ZELROVA Commands",
+        description=Config.MISSION,
+        color=discord.Color.red()
+    )
+
+    embed.add_field(
+        name="🎵 Music",
+        value=(
+            "`/zplay` `/zsearch` `/zstop` `/zpause` `/zresume`\n"
+            "`/zskip` `/zqueue` `/zvolume` `/zloop` `/zshuffle` `/znowplaying` `/zplayfile`"
+        ),
+        inline=False
+    )
+
+    embed.add_field(
+        name="🛡 Moderation",
+        value="`/zcommand` shows all prefix and slash commands. Moderation commands are also available with `z!` prefix.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🌐 Dashboard",
+        value="Use dashboard for live server control, music control, owner panel, backups and analytics.",
+        inline=False
+    )
+
+    embed.set_footer(text="ZELROVA Bot • /z command center")
+    await interaction.response.send_message(embed=embed)
+
+
+@bot.tree.command(name="zcommand", description="Show full ZELROVA command list")
+async def z_command(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="📜 ZELROVA Full Command List",
+        description="Slash-first command system.",
+        color=discord.Color.red()
+    )
+
+    embed.add_field(
+        name="🎵 Music",
+        value="/zplay, /zsearch, /zstop, /zpause, /zresume, /zskip, /zqueue, /zvolume, /zloop, /zshuffle, /znowplaying, /zplayfile",
+        inline=False
+    )
+
+    embed.add_field(
+        name="⚙ Prefix Backup",
+        value="Some older commands still use `z!` prefix for moderation, tickets, levels and owner tools while we migrate them to slash.",
+        inline=False
+    )
+
+    await interaction.response.send_message(embed=embed)
+
+
 @bot.command()
 async def ping(ctx):
     await ctx.reply(f"🏓 Pong! `{round(bot.latency * 1000)}ms`")
@@ -353,130 +503,10 @@ async def zelrova(ctx):
 
     embed.add_field(name="Version", value=Config.VERSION, inline=True)
     embed.add_field(name="Servers", value=str(len(bot.guilds)), inline=True)
-    embed.add_field(name="Users", value=str(calculate_total_members()), inline=True)
+    embed.add_field(name="Users", value=str(sum(g.member_count or 0 for g in bot.guilds)), inline=True)
     embed.add_field(name="Prefix", value=Config.PREFIX, inline=True)
     embed.add_field(name="Latency", value=f"{round(bot.latency * 1000)}ms", inline=True)
-    embed.add_field(name="Dashboard", value="Active", inline=True)
-
-    embed.set_footer(text="ZELROVA Control Center")
-
-    await ctx.reply(embed=embed)
-
-
-@bot.command()
-async def topservers(ctx):
-    data = db.load()
-    servers = data.get("servers", {})
-
-    ranking = []
-
-    for guild_id, info in servers.items():
-        if info.get("bot_joined") is False:
-            continue
-
-        name = info.get("server_name", "Unknown Server")
-        members = int(info.get("member_count", 0) or 0)
-        stats = info.get("stats", {})
-        commands = int(stats.get("commands", 0) or 0)
-        tickets = int(stats.get("tickets", 0) or 0)
-        warnings = int(stats.get("warnings", 0) or 0)
-
-        trust_score = max(
-            0,
-            min(
-                100,
-                int(50 + (members / 100) + (commands / 50) + (tickets * 2) - warnings)
-            )
-        )
-
-        ranking.append({
-            "name": name,
-            "members": members,
-            "commands": commands,
-            "trust_score": trust_score
-        })
-
-    ranking.sort(key=lambda x: (x["trust_score"], x["members"]), reverse=True)
-
-    description = ""
-
-    for index, server in enumerate(ranking[:10], start=1):
-        description += (
-            f"**#{index} {server['name']}**\n"
-            f"👥 Members: `{server['members']}`\n"
-            f"⚡ Commands: `{server['commands']}`\n"
-            f"⭐ Trust Score: `{server['trust_score']}%`\n\n"
-        )
-
-    if not description:
-        description = "No servers found yet."
-
-    embed = discord.Embed(
-        title="🏆 ZELROVA Top Trusted Servers",
-        description=description,
-        color=discord.Color.red()
-    )
-
-    await ctx.reply(embed=embed)
-
-
-@bot.command(name="command", aliases=["commands", "help"])
-async def command_list(ctx):
-    embed = discord.Embed(
-        title="📜 ZELROVA Bot Commands",
-        description=Config.MISSION,
-        color=discord.Color.red()
-    )
-
-    embed.add_field(
-        name="⚡ Basic",
-        value="`!ping`\n`!zelrova`\n`!command`\n`!topservers`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="🛡 Moderation",
-        value="`!warn @user reason`\n`!warnings @user`\n`!clearwarnings @user`\n`!kick @user reason`\n`!ban @user reason`\n`!unban user_id`\n`!timeout @user minutes reason`\n`!untimeout @user`\n`!clear amount`\n`!lock`\n`!unlock`\n`!slowmode seconds`\n`!nickname @user name`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="🔐 Security / AutoMod",
-        value="`!security`\n`!joinlock`\n`!joinunlock`\n`!lockdown`\n`!unlockdown`\n`!verification`\n`!automod`\n`!addbadword word`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="🎫 Tickets",
-        value="`!ticket reason`\n`!claim`\n`!close`\n`!add @user`\n`!remove @user`\n`!rename name`\n`!transcript`\n`!tickets`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="📊 Levels / Economy",
-        value="`!rank`\n`!leaderboard`\n`!balance`\n`!daily`\n`!shop`\n`!inventory`\n`!achievements`\n`!levels`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="🧠 AI",
-        value="`!ai question`\n`!translate language text`\n`!summarize text`\n`!codehelp question`\n`!animehelp anime`\n`!storyhelp idea`\n`!faq`\n`!aihelp`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="👋 Onboarding / Music / Logs",
-        value="`!onboarding`\n`!onboardinginfo`\n`!music`\n`!joinvc`\n`!leavevc`\n`!logs`\n`!logstats`\n`!exportlogs`",
-        inline=False
-    )
-
-    embed.add_field(
-        name="👑 Owner Only",
-        value="`!owner`\n`!setstatus`\n`!broadcast`\n`!servers`\n`!reloadcog`\n`!syncstate`\n`!maintenance`\n`!devmode`\n`!premiumserver`\n`!databaseinfo`\n`!leaveserver server_id`",
-        inline=False
-    )
-
-    embed.set_footer(text="ZELROVA Bot • One Bot. Everything You Need.")
+    embed.add_field(name="Dashboard", value="Live", inline=True)
 
     await ctx.reply(embed=embed)
 

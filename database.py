@@ -6,65 +6,29 @@ from datetime import datetime
 from config import Config
 
 
-DEFAULT_DATABASE = {
-    "bot": {
-        "name": "ZELROVA",
-        "version": "1.0 Foundation",
-        "status": "online",
-        "maintenance": False,
-        "developer_mode": False,
-        "last_ready": None
-    },
-
-    "dashboard": {
-        "theme": "dark-red-purple-blue",
-        "last_sync": None
-    },
-
-    "servers": {},
-
-    "users": {},
-
-    "tickets": {},
-
-    "warnings": {},
-
-    "logs": {},
-
-    "premium": {
-        "servers": [],
-        "users": []
-    }
-}
-
-
 DEFAULT_SERVER = {
-    "prefix": "!",
+    "prefix": Config.PREFIX,
     "language": "en",
-    "theme": "dark-red-purple-blue",
+    "theme": Config.THEME_DEFAULT,
+    "server_name": "Unknown Server",
+    "server_id": "",
+    "owner_id": "",
+    "member_count": 0,
+    "icon_url": None,
+    "bot_joined": True,
+    "online": True,
+    "joined_at": None,
+    "left_at": None,
 
-    "modules": {
-        "moderation": True,
-        "security": True,
-        "automod": True,
-        "welcome": True,
-        "reaction_roles": True,
-        "tickets": True,
-        "levels": True,
-        "logs": True,
-        "analytics": True,
-        "ai": True,
-        "music": False,
-        "backup": True,
-        "owner_panel": True
-    },
+    "modules": dict(Config.DEFAULT_MODULES),
 
     "channels": {
         "welcome": None,
         "leave": None,
         "logs": None,
         "tickets": None,
-        "announcements": None
+        "announcements": None,
+        "music": None
     },
 
     "roles": {
@@ -73,31 +37,9 @@ DEFAULT_SERVER = {
         "staff": None
     },
 
-    "automod": {
-        "bad_words": True,
-        "spam_protection": True,
-        "invite_links": True,
-        "scam_links": True,
-        "mention_spam": True,
-        "caps_spam": True,
-        "duplicate_messages": True
-    },
-
-    "tickets": {
-        "enabled": True,
-        "category_name": "Tickets",
-        "transcripts": True,
-        "rating": True
-    },
-
-    "levels": {
-        "enabled": True,
-        "xp_min": 10,
-        "xp_max": 25,
-        "cooldown": 60,
-        "daily_min": 100,
-        "daily_max": 250
-    },
+    "automod": dict(Config.AUTOMOD),
+    "tickets": dict(Config.TICKETS),
+    "levels": dict(Config.LEVELS),
 
     "stats": {
         "warnings": 0,
@@ -117,15 +59,56 @@ DEFAULT_USER = {
     "coins": 0,
     "inventory": [],
     "achievements": [],
-    "last_daily": None
+    "last_daily": None,
+    "created_at": None
+}
+
+
+DEFAULT_DATABASE = {
+    "bot": {
+        "name": Config.BOT_NAME,
+        "version": Config.VERSION,
+        "status": "offline",
+        "maintenance": False,
+        "developer_mode": False,
+        "last_ready": None,
+        "servers": 0,
+        "users": 0,
+        "latency": "0ms"
+    },
+
+    "dashboard": {
+        "theme": Config.THEME_DEFAULT,
+        "last_sync": None
+    },
+
+    "music": {
+        "status": "idle",
+        "current": None,
+        "queue": [],
+        "volume": 75,
+        "loop": False,
+        "updated_at": None
+    },
+
+    "servers": {},
+    "users": {},
+    "tickets": {},
+    "warnings": {},
+    "logs": {},
+
+    "premium": {
+        "servers": [],
+        "users": []
+    }
 }
 
 
 class Database:
     def __init__(self):
         self.path = Config.DATABASE_PATH
-
         folder = os.path.dirname(self.path)
+
         if folder:
             os.makedirs(folder, exist_ok=True)
 
@@ -134,13 +117,17 @@ class Database:
         else:
             self.ensure_structure()
 
+    def now(self):
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     def load(self):
         try:
             with open(self.path, "r", encoding="utf-8") as file:
                 return json.load(file)
         except Exception:
-            self.save(deepcopy(DEFAULT_DATABASE))
-            return deepcopy(DEFAULT_DATABASE)
+            data = deepcopy(DEFAULT_DATABASE)
+            self.save(data)
+            return data
 
     def save(self, data):
         with open(self.path, "w", encoding="utf-8") as file:
@@ -176,7 +163,8 @@ class Database:
 
         if guild_id not in data["servers"]:
             data["servers"][guild_id] = deepcopy(DEFAULT_SERVER)
-            data["servers"][guild_id]["created_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            data["servers"][guild_id]["server_id"] = guild_id
+            data["servers"][guild_id]["created_at"] = self.now()
             self.save(data)
         else:
             fixed = self.deep_merge(DEFAULT_SERVER, data["servers"][guild_id])
@@ -190,6 +178,30 @@ class Database:
         data = self.load()
         data["servers"][str(guild_id)] = server_data
         self.save(data)
+
+    def mark_server_live(self, guild):
+        server = self.get_server(guild.id)
+
+        server["server_name"] = guild.name
+        server["server_id"] = str(guild.id)
+        server["owner_id"] = str(guild.owner_id)
+        server["member_count"] = guild.member_count or 0
+        server["icon_url"] = guild.icon.url if guild.icon else None
+        server["bot_joined"] = True
+        server["online"] = True
+        server["left_at"] = None
+
+        if not server.get("joined_at"):
+            server["joined_at"] = self.now()
+
+        self.update_server(guild.id, server)
+
+    def mark_server_removed(self, guild_id):
+        server = self.get_server(guild_id)
+        server["bot_joined"] = False
+        server["online"] = False
+        server["left_at"] = self.now()
+        self.update_server(guild_id, server)
 
     def get_module(self, guild_id, module_name):
         server = self.get_server(guild_id)
@@ -207,7 +219,7 @@ class Database:
 
         if user_id not in data["users"]:
             data["users"][user_id] = deepcopy(DEFAULT_USER)
-            data["users"][user_id]["created_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            data["users"][user_id]["created_at"] = self.now()
             self.save(data)
         else:
             fixed = self.deep_merge(DEFAULT_USER, data["users"][user_id])
@@ -240,7 +252,7 @@ class Database:
         warning = {
             "reason": reason,
             "moderator_id": str(moderator_id),
-            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "time": self.now()
         }
 
         data["warnings"][guild_id][user_id].append(warning)
@@ -275,7 +287,7 @@ class Database:
             "channel_id": channel_id,
             "status": "open",
             "claimed_by": None,
-            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": self.now(),
             "closed_at": None
         }
 
@@ -284,22 +296,16 @@ class Database:
 
     def close_ticket(self, guild_id, channel_id):
         data = self.load()
-        guild_id = str(guild_id)
-        channel_id = str(channel_id)
-
-        ticket = data.get("tickets", {}).get(guild_id, {}).get(channel_id)
+        ticket = data.get("tickets", {}).get(str(guild_id), {}).get(str(channel_id))
 
         if ticket:
             ticket["status"] = "closed"
-            ticket["closed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            ticket["closed_at"] = self.now()
             self.save(data)
 
     def claim_ticket(self, guild_id, channel_id, staff_id):
         data = self.load()
-        guild_id = str(guild_id)
-        channel_id = str(channel_id)
-
-        ticket = data.get("tickets", {}).get(guild_id, {}).get(channel_id)
+        ticket = data.get("tickets", {}).get(str(guild_id), {}).get(str(channel_id))
 
         if ticket:
             ticket["claimed_by"] = str(staff_id)
@@ -315,7 +321,7 @@ class Database:
 
         data["logs"][guild_id][category].insert(0, {
             "message": message,
-            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "time": self.now()
         })
 
         data["logs"][guild_id][category] = data["logs"][guild_id][category][:100]
@@ -323,19 +329,28 @@ class Database:
 
     def increment_stat(self, guild_id, stat_name, amount=1):
         server = self.get_server(guild_id)
-
         server.setdefault("stats", {})
         server["stats"].setdefault(stat_name, 0)
         server["stats"][stat_name] += amount
-
         self.update_server(guild_id, server)
 
     def update_bot_state(self, **kwargs):
         data = self.load()
         data.setdefault("bot", {})
         data["bot"].update(kwargs)
-        data["bot"]["last_ready"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        data["bot"]["last_ready"] = self.now()
         self.save(data)
+
+    def update_music_state(self, **kwargs):
+        data = self.load()
+        data.setdefault("music", deepcopy(DEFAULT_DATABASE["music"]))
+        data["music"].update(kwargs)
+        data["music"]["updated_at"] = self.now()
+        self.save(data)
+
+    def get_music_state(self):
+        data = self.load()
+        return data.get("music", deepcopy(DEFAULT_DATABASE["music"]))
 
     def is_premium_server(self, guild_id):
         data = self.load()
@@ -351,6 +366,14 @@ class Database:
         if guild_id not in data["premium"]["servers"]:
             data["premium"]["servers"].append(guild_id)
             self.save(data)
+
+    def live_servers(self):
+        data = self.load()
+        return {
+            gid: server
+            for gid, server in data.get("servers", {}).items()
+            if server.get("bot_joined") and server.get("online")
+        }
 
 
 db = Database()

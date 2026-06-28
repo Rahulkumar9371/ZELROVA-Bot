@@ -2,10 +2,12 @@ const sidebar = document.getElementById("sidebar");
 const menuBtn = document.getElementById("menuBtn");
 const toast = document.getElementById("toast");
 const saveAllBtn = document.getElementById("saveAllBtn");
-const activityList = document.getElementById("activityList");
 
-function showToast(message = "Saved successfully") {
-  if (!toast) return;
+function showToast(message = "Done") {
+  if (!toast) {
+    console.log(message);
+    return;
+  }
 
   toast.textContent = message;
   toast.classList.add("show");
@@ -15,43 +17,36 @@ function showToast(message = "Saved successfully") {
   }, 2500);
 }
 
-function addActivity(message) {
-  if (!activityList) return;
-
-  const li = document.createElement("li");
-  li.textContent = message;
-  activityList.prepend(li);
-
-  if (activityList.children.length > 10) {
-    activityList.removeChild(activityList.lastElementChild);
-  }
-}
-
-async function postData(url, data = {}) {
+async function apiPost(url, data = {}) {
   try {
-    const response = await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data)
     });
 
-    const result = await response.json();
+    const json = await res.json();
 
-    if (result.success) {
-      showToast(result.message || "Done");
-      addActivity(result.message || "Dashboard updated.");
+    if (json.success) {
+      showToast(json.message || "Done");
     } else {
-      showToast(result.message || "Action failed");
-      alert(result.message || "Action failed");
+      showToast(json.message || "Failed");
     }
 
-    return result;
-
-  } catch (error) {
-    console.error(error);
+    return json;
+  } catch (err) {
+    console.error(err);
     showToast("Connection failed");
+    return null;
+  }
+}
+
+async function apiGet(url) {
+  try {
+    const res = await fetch(url);
+    return await res.json();
+  } catch (err) {
+    console.error(err);
     return null;
   }
 }
@@ -64,7 +59,7 @@ if (menuBtn && sidebar) {
 
 document.querySelectorAll("[data-module]").forEach(toggle => {
   toggle.addEventListener("change", async () => {
-    await postData("/api/save/modules", {
+    await apiPost("/api/save/modules", {
       [toggle.dataset.module]: toggle.checked
     });
   });
@@ -75,42 +70,131 @@ document.querySelectorAll("[data-action]").forEach(button => {
     const action = button.dataset.action;
 
     if (action === "Create Backup") {
-      await postData("/api/backup/create", {});
+      await apiPost("/api/backup/create", {});
       return;
     }
 
-    await postData("/api/owner/action", {
-      action: action,
+    await apiPost("/api/owner/action", {
+      action,
       payload: {}
     });
   });
 });
 
-if (saveAllBtn) {
-  saveAllBtn.addEventListener("click", async () => {
-    const modules = {};
+document.querySelectorAll("[data-leave-server]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const serverId = button.dataset.leaveServer;
 
-    document.querySelectorAll("[data-module]").forEach(toggle => {
-      modules[toggle.dataset.module] = toggle.checked;
+    if (!confirm(`ZELROVA ko server ${serverId} se leave karwana hai?`)) {
+      return;
+    }
+
+    await apiPost("/api/owner/leave-server", {
+      server_id: serverId
     });
+  });
+});
 
-    await postData("/api/save/modules", modules);
+async function musicControl(action, payload = {}) {
+  return await apiPost("/api/music/control", {
+    action,
+    payload
   });
 }
 
-async function loadStatus() {
-  try {
-    const response = await fetch("/api/status");
-    const data = await response.json();
+window.zelrovaMusic = {
+  pause: () => musicControl("pause"),
+  resume: () => musicControl("resume"),
+  skip: () => musicControl("skip"),
+  stop: () => musicControl("stop"),
+  loop: () => musicControl("loop"),
+  shuffle: () => musicControl("shuffle"),
+  volume: value => musicControl("volume", { value })
+};
 
-    if (data.success) {
-      addActivity(`Status checked: ${data.status} | ${data.latency}`);
+async function refreshMusicStatus() {
+  const data = await apiGet("/api/music/status");
+  if (!data || !data.success) return;
+
+  const music = data.music || {};
+
+  const title = document.getElementById("musicTitle");
+  const status = document.getElementById("musicStatus");
+  const queue = document.getElementById("musicQueue");
+  const volume = document.getElementById("musicVolume");
+  const thumb = document.getElementById("musicThumb");
+
+  if (title) {
+    title.textContent = music.current ? music.current.title : "Nothing Playing";
+  }
+
+  if (status) {
+    status.textContent = music.status || "idle";
+  }
+
+  if (volume) {
+    volume.textContent = `${music.volume || 75}%`;
+  }
+
+  if (thumb && music.current && music.current.thumbnail) {
+    thumb.src = music.current.thumbnail;
+  }
+
+  if (queue) {
+    queue.innerHTML = "";
+
+    const items = music.queue || [];
+
+    if (!items.length) {
+      queue.innerHTML = "<li>Queue empty</li>";
+    } else {
+      items.slice(0, 10).forEach((track, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${track.title}`;
+        queue.appendChild(li);
+      });
     }
-  } catch (error) {
-    console.error(error);
   }
 }
 
-setTimeout(loadStatus, 1000);
+document.querySelectorAll("[data-music]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const action = button.dataset.music;
+    await musicControl(action);
+    setTimeout(refreshMusicStatus, 700);
+  });
+});
 
-console.log("ZELROVA Dashboard JS Loaded");
+const volumeSlider = document.getElementById("musicVolumeSlider");
+if (volumeSlider) {
+  volumeSlider.addEventListener("change", async () => {
+    await musicControl("volume", {
+      value: Number(volumeSlider.value)
+    });
+    setTimeout(refreshMusicStatus, 700);
+  });
+}
+
+async function refreshDashboardStats() {
+  const data = await apiGet("/api/dashboard-data");
+  if (!data || !data.stats) return;
+
+  document.querySelectorAll("[data-stat]").forEach(el => {
+    const key = el.dataset.stat;
+    if (data.stats[key] !== undefined) {
+      el.textContent = data.stats[key];
+    }
+  });
+}
+
+if (saveAllBtn) {
+  saveAllBtn.addEventListener("click", async () => {
+    showToast("Saved");
+  });
+}
+
+refreshMusicStatus();
+refreshDashboardStats();
+
+setInterval(refreshMusicStatus, 10000);
+setInterval(refreshDashboardStats, 20000);
